@@ -1,5 +1,5 @@
 const getpage = async () => {
-  let res = await fetch('http://localhost:8000/post/1?format=json', {
+  let res = await fetch('http://localhost:8000/post/2?format=json', {
     method: 'GET',
     mode: "cors",
     cache: "no-cache",
