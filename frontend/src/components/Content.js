@@ -1,10 +1,13 @@
-import React from 'react'
-const { Component } = React
+import BaseComponent from './BaseComponent'
 
-class Content extends Component {
+class Content extends BaseComponent {
   render() {
     return (
-      <article id="pageContent">I'm the main content!</article>
+      <article id="pageContent">
+        <this.Title />
+        <this.Subtitle />
+        <this.Content />
+      </article>
     );
   }
 }

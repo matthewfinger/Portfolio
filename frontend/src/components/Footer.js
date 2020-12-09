@@ -1,11 +1,12 @@
-import React from 'react'
-const { Component } = React
+import BaseComponent from './BaseComponent'
 
-class Footer extends Component {
+class Footer extends BaseComponent {
   render() {
     return (
       <footer id="pageFooter">
-        <p>I'm the footer</p>
+        <this.Title />
+        <this.Subtitle />
+        <this.Content />
       </footer>
     );
   }

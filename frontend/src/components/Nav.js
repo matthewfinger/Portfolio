@@ -1,12 +1,34 @@
-import React from 'react'
-const { Component } = React;
+import BaseComponent from './BaseComponent'
 
+class Nav extends BaseComponent {
+  Content = () => {
+    const {content} = this.state.post;
+    try {
+      const sectgroups = content.split(';');
+      let sections = [];
+      sectgroups.forEach(sectionstr => {
+        let splitstr = sectionstr.split(',');
+        sections.push({sectionName:splitstr[0], sectionId:splitstr[1]})
+      });
+      return (
+        <ul className='navUl'>
+          {sections.map((section, index) =>
+            <li key={index}>
+              <a href={`#${section.sectionId}`}>{section.sectionName}</a>
+            </li>
+          )}
+        </ul>
+      );
+    } catch (error) {
+      console.warn(error);
+      return (<></>);
+    }
+  }
 
-class Nav extends Component {
   render() {
     return (
       <nav id="pageNav">
-        <p>I'm the nav section</p>
+        <this.Content />
       </nav>
     )
   }

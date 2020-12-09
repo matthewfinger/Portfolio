@@ -23,9 +23,14 @@ def post_list(request, format=None):
 
 
 @api_view(['GET', 'PUT','DELETE'])
-def post_detail(request, pk, format=None):
+def post_detail(request, pk=None, name=None, format=None):
+    args = {}
+    if pk:
+        args['pk'] = pk
+    else:
+        args['name'] = name
     try:
-        post = Post.objects.get(pk=pk)
+        post = Post.objects.get(**args)
     except Post.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 

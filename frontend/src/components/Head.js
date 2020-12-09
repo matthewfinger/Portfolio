@@ -1,11 +1,12 @@
-import React from 'react'
-const { Component } = React
+import BaseComponent from './BaseComponent'
 
-class Head extends Component {
+class Head extends BaseComponent {
+
   render() {
     return (
       <header id="pageHeader">
-        <h1>The header</h1>
+        <this.Title />
+        <this.Subtitle />
       </header>
     );
   }
