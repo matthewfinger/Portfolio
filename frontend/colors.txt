@@ -1,0 +1,8 @@
+All the colors for the theme will be listed here for reference
+
+Cyan : #00c2ff
+Dark Grey: #333333
+Dark Dark Grey: #0c0c0c
+Near White : #f0f0f0
+Yellow: #f7ff08
+Magenta: #bf2565
