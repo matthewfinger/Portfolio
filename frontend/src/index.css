@@ -1,6 +1,6 @@
 body {
   height: 100%;
-  margin: 5rem auto;
+  margin-top: 15vh;
   min-height: 100%;
   padding: 0px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -17,7 +17,16 @@ code {
 
 html {
   background: #333;
-  color: white;
+  color: #f0f0f0;
+}
+
+#pageContent {
+  margin: auto;
+  width: 80vw;
+}
+
+#pageContent h1 {
+  font-size: 36px;
 }
 
 #navLogo img {
