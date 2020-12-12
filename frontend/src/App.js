@@ -16,7 +16,6 @@ class App extends Component {
   render() {
     return (
       <>
-        <Head getPostFunction={ this.getPost } postName='Header' />
         <Nav getPostFunction={ this.getPost } postName='Nav'/>
         <Content getPostFunction={ this.getPost } postName='Content'/>
         <Footer getPostFunction={ this.getPost } postName='Footer'/>

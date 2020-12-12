@@ -12,6 +12,9 @@ class Nav extends BaseComponent {
       });
       return (
         <ul className='navUl'>
+          <li id="navLogo">
+            <a href="#" id="navLogoLink"><img src="/logo.png"/></a>
+          </li>
           {sections.map((section, index) =>
             <li key={index}>
               <a href={`#${section.sectionId}`}>{section.sectionName}</a>

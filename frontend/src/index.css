@@ -21,10 +21,11 @@ html {
   color: white;
 }
 
-#pageHeader {
-  margin: 0;
-  width: 100vw;
+#navLogo img {
+  width: 3vw;
 }
+
+#navLogo
 
 #pageFooter {
   bottom: 0;
@@ -34,6 +35,60 @@ html {
   position: fixed;
   width: 100vw;
   z-index: 3;
+}
+
+#pageNav {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  height: 15vh;
+  justify-content: center;
+  margin: 0;
+  position: absolute;
+  top: 0px;
+  width: 100vw;
+}
+
+#pageNav ul {
+  align-items: center;
+  background: #0c0c0cff;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  justify-content: flex-start;
+  width: 80vw;
+}
+
+#pageNav li {
+  height: 100%;
+  margin: 0 4vw 0 0;
+}
+
+#pageNav li:first-of-type {
+  margin: 1vh 2vw 1vh 0;
+}
+
+#navLogoLink, #navLogoLink:hover, #navLogoLink:active {
+  background: none !important;
+  height: 7vh;
+  margin: 0px;
+  padding: 0px !important;
+}
+
+#pageNav a, #pageNav a:visited, #pageNav a:link {
+  border-radius: 4px;
+  color: #00c2ff;
+  font-family: impact;
+  font-size: 20px;
+  padding: 2vh;
+  text-decoration: none;
+  transition: background 0.3s, color 0.6s;
+}
+
+#pageNav a:active, #pageNav a:hover {
+  background: #f7ff08;
+  color: #0088cc;
 }
 
 #root {
