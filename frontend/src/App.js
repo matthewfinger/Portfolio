@@ -1,23 +1,30 @@
 import React from 'react'
 import Nav from './components/Nav'
-import Content from './components/Content'
+import { Content, MainContent } from './components/Content'
 import Footer from './components/Footer'
-import getPost from './functions/HTTPClient'
+import { getPost, getImage, getSections } from './functions/HTTPClient'
 
 const { Component } = React;
+
+getSections()
+.then(console.log)
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.getPost = getPost;
+    this.functions = { getPost, getImage, getSections };
   }
 
   render() {
+    const functions = this.functions;
     return (
       <>
-        <Nav getPostFunction={ this.getPost } postName='Nav'/>
-        <Content getPostFunction={ this.getPost } postName='Content'/>
-        <Footer getPostFunction={ this.getPost } postName='Footer'/>
+        <Nav functions={ functions } postName='Nav'/>
+        <article id="pageContent">
+          <MainContent functions={ functions } postName='Content'/>
+          <Content functions={ functions }/>
+        </article>
+        <Footer functions={ functions } postName='Footer'/>
       </>
     );
   }

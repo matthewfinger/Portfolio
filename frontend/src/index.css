@@ -22,6 +22,7 @@ html {
 
 #pageContent {
   margin: auto;
+  margin-bottom: 150px;
   width: 80vw;
 }
 
@@ -29,6 +30,7 @@ html {
   font-size: 36px;
   font-weight: bold;
 }
+
 
 #navLogo img {
   width: 3vw;
@@ -75,7 +77,7 @@ html {
 
 #pageNav ul {
   align-items: center;
-  background: #0c0c0cff;
+  background: #0c0c0cbb;
   border-radius: 8px;
   display: flex;
   flex-direction: row;
@@ -118,4 +120,40 @@ html {
 #root {
   margin: 0;
   padding: 0;
+}
+
+#section1Logo {
+  margin: 0;
+  width: 37vw;
+}
+
+#section1LogoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 4vw;
+  margin-right: 0px;
+}
+
+#section1LogoContainer h2, #section1LogoContainer h3 {
+  margin: 0;
+}
+
+#section1LogoContainer h2 {
+  color: #00c2ff;
+  font-size: 3vw;
+}
+
+#section1LogoContainer h3 {
+  color: #f7ff08;
+  font-size: 2.5vw;
+}
+
+.pageSection {
+  display: flex;
+  flex-direction: row;
+}
+
+.pageSection .post_content {
+  font-size: 20px;
 }

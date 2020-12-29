@@ -2,6 +2,7 @@ import React from 'react'
 const { Component } = React;
 
 class BaseComponent extends Component {
+
   Title = () => {
     const {title, title_id, title_class} = this.state.post;
     if (!title) return (<></>);
@@ -20,11 +21,32 @@ class BaseComponent extends Component {
     return (<div className={content_class} id={content_id}>{content}</div>);
   }
 
+  getResourceFunction() {
+    return this.state.functions[this.state.resourceFunction] || (() => {
+      throw Error(`Function with key ${this.state.resourceFunction} must be added to functions prop object!`);
+    });
+  }
+
+  async getResource() {
+    try {
+      if (!this.props.postName) throw Error('no post to fetch')
+      const postName = this.props.postName || '';
+      let post = await this.getResourceFunction()(postName);
+      this.setState({post:{...this.state.post, ...post}});
+    } catch (error) {
+      console.warn(error);
+    }
+  }
+
 
   constructor(props) {
     super(props);
     this.state = {
+      functions: this.props.functions || {},
+      resourceFunction: 'getPost',
       post: {
+        container_id: '',
+        container_class: '',
         title: '',
         title_id: '',
         title_class: '',
@@ -36,22 +58,17 @@ class BaseComponent extends Component {
         content_class: ''
       }
     };
+    if (this.props.postObject) this.state = { ...this.state, post: { ...this.props.postObject } };
   }
 
   async componentDidMount() {
-    try {
-      const postName = this.props.postName || '';
-      let post = await this.props.getPostFunction(postName);
-      this.setState({post:{...this.state.post, ...post}});
-    } catch (error) {
-      console.warn(error);
-    }
+    this.getResource();
   }
 
 
   render() {
     return (
-      <div>
+      <div id={this.state.post.container_id} className={this.state.post.container_class}>
         <this.Title />
         <this.Subtitle />
         <this.Content />
@@ -60,4 +77,42 @@ class BaseComponent extends Component {
   }
 }
 
-export default BaseComponent
+class ImageComponent extends BaseComponent {
+  constructor(props) {
+    super(props);
+    this.state.resourceFunction = 'getImage';
+    delete this.state.post;
+    this.state.imageurl = '';
+    this.state.resourceserver = props.resourceserver || 'http://localhost:8000';
+  }
+
+  async getResource() {
+    try {
+      const imageName = this.props.imageName || '';
+      let imageUrl = await this.getResourceFunction()(imageName);
+      this.setState({imageurl: this.state.resourceserver + imageUrl.image});
+    } catch (error) {
+      console.warn(error);
+    }
+  }
+
+  async componentDidMount() {
+    this.getResource();
+  }
+
+  Img = () => {
+    return (<img id={this.props.id || ''} src={this.state.imageurl} alt={this.props.alt || ""} />);
+  }
+
+  render () {
+    return (
+      <div id={this.props.containerId || ""}>
+        <this.Img />
+        <h3>Matthew Finger</h3>
+        <h2>Web Developer</h2>
+      </div>
+    );
+  }
+}
+
+export { BaseComponent, ImageComponent }

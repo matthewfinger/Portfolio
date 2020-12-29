@@ -1,4 +1,4 @@
-import BaseComponent from './BaseComponent'
+import { BaseComponent } from './BaseComponent'
 
 class Footer extends BaseComponent {
   Content = () => {

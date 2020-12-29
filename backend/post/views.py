@@ -1,16 +1,66 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Post
-from .serializers import PostSerializer
+from .models import Post, Image
+from .serializers import PostSerializer, ImageSerializer
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+#get ALL images or POST a new image
 @api_view(['GET','POST'])
-def post_list(request, format=None):
+def image_list(request, format=None):
+    if request.method == 'GET':
+        images = Image.objects.all()
+        serializer = ImageSerializer(images, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = ImageSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def image_detail(request, pk=None, name=None, format=None):
+    args = {}
+    if pk:
+        args['pk'] = pk
+    elif name:
+        args['name'] = name
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        image = Image.objects.get(**args)
+    except Image.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = ImageSerializer(image)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = ImageSerializer(image, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        image.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+#get ALL posts & POST a new post
+@api_view(['GET','POST'])
+def post_list(request, sections=False, format=None):
     if request.method == 'GET':
         posts = Post.objects.all()
+        if sections:
+            posts = posts.filter(is_section=True)
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
@@ -21,7 +71,7 @@ def post_list(request, format=None):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
-
+#get/read, put/update, or delete a post
 @api_view(['GET', 'PUT','DELETE'])
 def post_detail(request, pk=None, name=None, format=None):
     args = {}
