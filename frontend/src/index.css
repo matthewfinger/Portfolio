@@ -20,6 +20,11 @@ html {
   color: #f0f0f0;
 }
 
+/*Just testing some stuff out*/
+#animg {
+  width: 5vw;
+}
+
 #pageContent {
   margin: auto;
   margin-bottom: 150px;

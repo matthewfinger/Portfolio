@@ -1,4 +1,6 @@
 import React from 'react'
+import { getPost, getImage, getSections } from '../functions/HTTPClient'
+import { getSegments, getComponents, MainComponent } from '../functions/CmsFunctions'
 const { Component } = React;
 
 class BaseComponent extends Component {
@@ -18,7 +20,8 @@ class BaseComponent extends Component {
   Content = () => {
     const {content, content_id, content_class} = this.state.post;
     if (!content) return (<></>);
-    return (<div className={content_class} id={content_id}>{content}</div>);
+    const AdjustedContent = () => MainComponent(content);
+    return (<div className={content_class} id={content_id}><AdjustedContent /></div>);
   }
 
   getResourceFunction() {
@@ -29,7 +32,7 @@ class BaseComponent extends Component {
 
   async getResource() {
     try {
-      if (!this.props.postName) throw Error('no post to fetch')
+      if (!this.props.postName) return;
       const postName = this.props.postName || '';
       let post = await this.getResourceFunction()(postName);
       this.setState({post:{...this.state.post, ...post}});
@@ -105,6 +108,7 @@ class ImageComponent extends BaseComponent {
   }
 
   render () {
+    if (this.props.imageOnly) return (<this.Img />);
     return (
       <div id={this.props.containerId || ""}>
         <this.Img />
