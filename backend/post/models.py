@@ -6,6 +6,7 @@ class Post(models.Model):
     is_section = models.BooleanField(blank=True, default=False)
     container_id = models.CharField(max_length=100, default='', blank=True)
     container_class = models.CharField(max_length=100, default='', blank=True)
+    wordiness = models.IntegerField(default=0, blank=True) # used to specify how verbose the post is
     order_key = models.IntegerField(default=0, blank=True)
     title = models.CharField(max_length=100, blank=True, default='')
     title_id = models.CharField(max_length=100, default='', blank=True)

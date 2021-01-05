@@ -1,6 +1,11 @@
 import { BaseComponent } from './BaseComponent'
 
 class Nav extends BaseComponent {
+  constructor(props) {
+    super(props);
+    this.state.evaluateDynamicContent = false;
+  }
+
   Content = () => {
     const {content} = this.state.post;
     try {

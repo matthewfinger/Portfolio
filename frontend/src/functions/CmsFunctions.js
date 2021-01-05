@@ -1,33 +1,43 @@
-import { BaseComponent, ImageComponent } from '../components/BaseComponent'
+import { ImageComponent } from '../components/BaseComponent'
 import { getPost, getImage, getSections } from './HTTPClient'
 const functions = { getPost, getImage, getSections };
 
-function evalTag(tag) {
+
+//expects a 'tag', which'll be a string, in enclosed in '[%' and '%]'
+//returns an object with a react component as the 'body' property, and the 'wordiness' as a property as well
+function evalTag(tag, wordiness=0) {
+  let out = { wordiness, body: (<span></span>) };
+
   tag = tag.replaceAll(/\[%\s*|\s*%\]/g, '');
   let values = tag.split(/\s+/);
-  let options = {
-    'id': ''
-  };
-  if (values.length < 2) return '';
+
   values.forEach((value, index) => {
     if (value.includes('=')) {
       let keyval = value.split('=', 2);
-      options[keyval[0]] = keyval[1];
+      out[keyval[0]] = keyval[1];
     }
-  })
-  console.log(values[1])
+  });
+
+  //ensure the wordiness is a valid Number
+  out.wordiness = Number(out.wordiness) || wordiness;
+
   switch (values[0]) {
     case 'img':
-      return (<ImageComponent functions={functions} imageName={values[1]} imageOnly={true} id={options.id}/>);
+      out.body = (<ImageComponent functions={functions} imageName={values[1]} imageOnly={true} id={out.imgId || out.id}/>);
+      if (!out.imgId)
+        delete out.id; //we don't want the parent obj to have the same id
       break;
     default:
-      return (<></>);
-
+      values = values.filter(val => !val.includes('='));
+      out.body = (<span>{values.join(' ')}</span>);
   }
+
+  return out;
 }
 
 //function that seperates dynamic content (denoted within [%, %]) and static text
-function getSegments(textStr) {
+//returns an Array of substrings
+function getSegments(textStr, staticVals=true, dynamicVals=true) {
   const opener = '[%';
   const closer = '%]';
   let segments = [];
@@ -36,13 +46,13 @@ function getSegments(textStr) {
   for (let i = 0; i < textStr.length; i++) {
     let nextTwo = textStr.substring(i, i+2);
     if (nextTwo === opener && !segment[1]) {
-      segments.push([ ...segment ]);
+      if (staticVals) segments.push([ ...segment ]);
       segment[1] = true;
       segment[0] = '';
     } else if (nextTwo === closer && segment[1]) {
       segment[0] += nextTwo;
       i += 2;
-      segments.push([ ...segment ]);
+      if (dynamicVals) segments.push([ ...segment ]);
       segment[1] = false;
       segment[0] = '';
     }
@@ -55,31 +65,37 @@ function getSegments(textStr) {
   return segments;
 }
 
-//converts content text into usable components
-function getComponents(textStr) {
+//takes the main text as an input, and returns a list of objects (to be rendered)
+//each object in the list will have at least a 'body', and a 'wordiness' property
+function getComponents(textStr, wordiness=0) {
+  let components = [];
   try {
     let segments = getSegments(textStr);
-    let components = [];
     segments.forEach(segment => {
+
       if (segment[1]) {
-        components.push(() => evalTag(segment[0]));
+        //dynamic content
+        let evaluatedTag = evalTag(segment[0], wordiness)
+        components.push(evaluatedTag);
       } else {
-        components.push(() => (<>{segment[0]}</>))
+        //static content
+        components.push({
+          body: (<>{segment[0]}</>),
+          wordiness
+        });
       }
     });
-    return components;
+
   } catch (error) {
     console.warn(error);
-    return (<>{textStr}</>);
+    components.push({
+      body: (<>{textStr}</>),
+      wordiness
+    });
   }
+
+  return components;
 }
 
 
-//wrapper for getComponents that cn be treated as a component
-function MainComponent(textStr) {
-  let components = getComponents(textStr);
-  return (<>{components.map((Component, index) => <span key={index}><Component /></span>)}</>);
-}
-
-
-export { getSegments, getComponents, MainComponent }
+export { getSegments, getComponents }

@@ -4,7 +4,7 @@ from .models import Post, Image
 class PostSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Post
-        fields = ['id', 'name', 'is_section', 'container_id', 'container_class', 'order_key']
+        fields = ['id', 'name', 'is_section', 'container_id', 'container_class', 'wordiness', 'order_key']
         for base in ['title', 'subtitle', 'content']:
             fields.append(base)
             for addition in ['class', 'id']:

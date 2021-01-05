@@ -1,9 +1,11 @@
 const default_base_url = 'http://localhost:8000/'
 
 //returns JWT containing the post and all the info about it
-async function getPost(postName=null, url=default_base_url+"post/name/") {
+async function getPost(postName=null, id=null, url=default_base_url+"post/") {
   if (postName) {
-    url += `${postName}`;
+    url += `name/${postName}`;
+  } else if (id) {
+    url += id;
   }
   url += "?format=json";
   try {

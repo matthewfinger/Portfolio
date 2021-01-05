@@ -31,13 +31,15 @@ class Content extends BaseComponent {
       <>
         {
           sections.map((sectionObject, index) => {
+            let out = (<span key={index}></span>);
             if (index > 0) {
-              return (
+              out = (
                 <div id={`pageSection${index}`} key={index}>
-                  <BaseComponent functions={this.props.functions || []} postObject={sectionObject}/>
+                  <BaseComponent functions={this.props.functions || {}} postObject={sectionObject} wordiness={ this.props.wordiness || 0 }/>
                 </div>
               );
             }
+            return out;
           })
         }
       </>

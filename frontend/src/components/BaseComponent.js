@@ -1,6 +1,6 @@
 import React from 'react'
 import { getPost, getImage, getSections } from '../functions/HTTPClient'
-import { getSegments, getComponents, MainComponent } from '../functions/CmsFunctions'
+import { getComponents } from '../functions/CmsFunctions'
 const { Component } = React;
 
 class BaseComponent extends Component {
@@ -17,11 +17,33 @@ class BaseComponent extends Component {
     return (<h3 className={subtitle_class} id={subtitle_id}>{subtitle}</h3>);
   }
 
+  ContentBody = () => {
+    const { ContentComponents, content } = this.state.post;
+    const { evaluateDynamicContent } = this.state;
+    const wordiness = this.props.wordiness || 0;
+
+    //only include components of the body that aren't too wordy
+    const filteredComponents = ContentComponents.filter(component => component.wordiness <= wordiness);
+
+    if (!evaluateDynamicContent)
+      return (<span data-wordiness={wordiness}>{content}</span>);
+
+    return (
+      <>{filteredComponents.map(component => (
+          <span id={component.id} className={component.className} data-wordiness={wordiness}>{component.body}</span>
+        ))}</>
+    );
+
+  }
+
   Content = () => {
-    const {content, content_id, content_class} = this.state.post;
-    if (!content) return (<></>);
-    const AdjustedContent = () => MainComponent(content);
-    return (<div className={content_class} id={content_id}><AdjustedContent /></div>);
+    const { content_id, content_class } = this.state.post;
+
+    return (
+      <div className={content_class} id={content_id}>
+        <this.ContentBody />
+      </div>
+    );
   }
 
   getResourceFunction() {
@@ -32,9 +54,24 @@ class BaseComponent extends Component {
 
   async getResource() {
     try {
-      if (!this.props.postName) return;
+      if (!(this.props.postName || this.props.postObject)) return;
       const postName = this.props.postName || '';
-      let post = await this.getResourceFunction()(postName);
+      let post = this.props.postObject;
+
+      if (!post)
+        post = await this.getResourceFunction()(postName);
+
+      const wordiness = this.props.wordiness || post.wordiness || 0;
+
+
+      if (this.state.evaluateDynamicContent)
+        post.ContentComponents = getComponents(post.content, wordiness);
+      else
+        post.ContentComponents = [{
+          body: (<>{post.content}</>),
+          wordiness
+        }]
+
       this.setState({post:{...this.state.post, ...post}});
     } catch (error) {
       console.warn(error);
@@ -45,8 +82,9 @@ class BaseComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      functions: this.props.functions || {},
-      resourceFunction: 'getPost',
+      functions: this.props.functions || { getPost, getImage, getSections },
+      resourceFunction: this.props.resourceFunction || 'getPost',
+      evaluateDynamicContent: this.props.evaluateDynamicContent || true,
       post: {
         container_id: '',
         container_class: '',
@@ -56,18 +94,18 @@ class BaseComponent extends Component {
         subtitle: '',
         subtitle_id: '',
         subtitle_class: '',
+        ContentComponents: [{body:(<></>), wordiness:0}],
         content: '',
         content_id: '',
-        content_class: ''
+        content_class: '',
       }
     };
-    if (this.props.postObject) this.state = { ...this.state, post: { ...this.props.postObject } };
+    //if (this.props.postObject) this.state = { ...this.state, post: { ...this.props.postObject } };
   }
 
   async componentDidMount() {
     this.getResource();
   }
-
 
   render() {
     return (
