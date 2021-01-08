@@ -109,7 +109,7 @@ async function fetchList(url) {
       throw Error(`Error when fetching Array from '${url}'! Expected a JSON encoded array`);
     else out = out.concat(jsonRes);
 
-    if (out[0] && out[0].order_key)
+    if (out[0] && Object.keys(out[0]).includes('order_key'))
       out = out.sort((elem1, elem2) => elem1.order_key > elem2.order_key);
 
   } catch (error) {
