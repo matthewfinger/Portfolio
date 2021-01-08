@@ -31,17 +31,18 @@ class App extends Component {
 
   render() {
     const functions = this.functions;
-    const { wordinessLevel } = this.state;
+    const getWordiness = () => this.state.wordinessLevel;
     return (
       <>
         <Nav functions={ functions } postName='Nav'/>
         <Options
           incrementWordiness={this.incrementWordiness}
           decrementWordiness={this.decrementWordiness}
+          getWordiness={getWordiness}
         />
         <article id="pageContent">
-          <MainContent functions={ functions } postName='Content' wordiness={wordinessLevel}/>
-          <Content functions={ functions } wordiness={wordinessLevel}/>
+          <MainContent functions={ functions } postName='Content' wordiness={getWordiness}/>
+          <Content functions={ functions } wordiness={getWordiness}/>
         </article>
         <Footer functions={ functions } postName='Footer'/>
       </>

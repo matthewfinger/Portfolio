@@ -6,14 +6,14 @@ const functions = { getPost, getImage, getSections };
 //mainly for to eval tags from the backend
 //each function SHOULD take in a 'props' arg
 const postFunctions = {
-  "SkillList" : props => (<SkillContainer skillList={props.list} wordiness={props.wordiness} />)
+  "SkillList" : props => (<SkillContainer skillList={props.list} wordiness={props.getWordiness} />)
 };
 
 
 //expects a 'tag', which'll be a string, in enclosed in '[%' and '%]'
 //returns an object with a react component as the 'body' property, and the 'wordiness' as a property as well
-async function evalTag(tag, wordiness=0) {
-  let out = { wordiness, body: (<span></span>) };
+async function evalTag(tag, getWordiness=()=>0) {
+  let out = { getWordiness, wordiness:getWordiness(), body: (<span></span>) };
 
   tag = tag.replaceAll(/\[%\s*|\s*%\]/g, '');
   let values = tag.split(/\s+/);
@@ -25,12 +25,13 @@ async function evalTag(tag, wordiness=0) {
     }
   });
 
-  //ensure the wordiness is a valid Number
-  out.wordiness = Number(out.wordiness) || wordiness;
+  // try to ensure the wordiness is a valid Number
+  out.wordiness = Number(out.wordiness) || getWordiness();
 
   switch (values[0]) {
     case 'img':
-      out.body = (<ImageComponent functions={functions} imageName={values[1]} imageOnly={true} id={out.imgId || out.id}/>);
+      const tempOut = { ...out };
+      out.body = () => (<ImageComponent functions={functions} imageName={values[1]} imageOnly={true} id={tempOut.imgId || tempOut.id}/>);
       if (!out.imgId)
         delete out.id; //we don't want the parent obj to have the same id
       break;
@@ -42,7 +43,7 @@ async function evalTag(tag, wordiness=0) {
             ...out,
             list
           }
-          out.body = postFunctions[values[2]](props);
+          out.body = () => postFunctions[values[2]](props);
         } catch (err) {
           console.warn(err);
         }
@@ -50,7 +51,7 @@ async function evalTag(tag, wordiness=0) {
       break;
     default:
       values = values.filter(val => !val.includes('='));
-      out.body = (<span>{values.join(' ')}</span>);
+      out.body = () => (<span>{values.join(' ')}</span>);
   }
 
   return out;
@@ -88,9 +89,10 @@ function getSegments(textStr, staticVals=true, dynamicVals=true) {
 
 //takes the main text as an input, and returns a list of objects (to be rendered)
 //each object in the list will have at least a 'body', and a 'wordiness' property
-async function getComponents(post, parentComponent, wordiness=0) {
+async function getComponents(post, parentComponent, getWordiness=()=>0) {
   const textStr = post.content || post.textStr;
   let components = [];
+  const BaseBody = seg => () => (<>{seg}</>);
   try {
     let segments = getSegments(textStr);
     let segment = [];
@@ -99,13 +101,13 @@ async function getComponents(post, parentComponent, wordiness=0) {
 
       if (segment[1]) {
         //dynamic content
-        let evaluatedTag = await evalTag(segment[0], wordiness)
+        let evaluatedTag = await evalTag(segment[0], getWordiness)
         components.push(evaluatedTag);
       } else {
         //static content
         components.push({
-          body: (<>{segment[0]}</>),
-          wordiness
+          body: BaseBody(segment[0]),
+          wordiness: getWordiness()
         });
       }
     }
@@ -113,8 +115,8 @@ async function getComponents(post, parentComponent, wordiness=0) {
   } catch (error) {
     console.warn(error);
     components.push({
-      body: (<>{textStr}</>),
-      wordiness
+      body: BaseBody(textStr),
+      wordiness: getWordiness()
     });
   }
 

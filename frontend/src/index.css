@@ -122,6 +122,39 @@ html {
   color: #0088cc;
 }
 
+#pageOptions {
+  display: flex;
+  justify-content: flex-end;
+  position: fixed;
+  right: 7vw;
+  top: 13vh;
+  width: 84vw;
+  z-index: 5;
+}
+
+.optionsRow {
+  align-items: stretch;
+  display: flex;
+  flex-direction: row;
+  width: 300px;
+}
+
+.optionsRow button {
+  border: 0px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-family: arial;
+  font-weight: 600;
+  flex-grow: 1;
+  height: 30px;
+  margin: auto 1em;
+  transition: background 0.15s;
+}
+
+.optionsRow button:hover:enabled {
+  background: #faff70;
+}
+
 #root {
   margin: 0;
   padding: 0;

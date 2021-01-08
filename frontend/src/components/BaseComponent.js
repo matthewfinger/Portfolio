@@ -20,7 +20,7 @@ class BaseComponent extends Component {
   ContentBody = () => {
     let { ContentComponents, content } = this.state.post;
     let { evaluateDynamicContent } = this.state;
-    let wordiness = this.props.wordiness || 0;
+    let wordiness = this.props.wordiness ? this.props.wordiness() : 0;
 
     //only include components of the body that aren't too wordy
     let filteredComponents = ContentComponents.filter(component => component.wordiness <= wordiness);
@@ -28,8 +28,8 @@ class BaseComponent extends Component {
       return (<span data-wordiness={wordiness}>{content}</span>);
 
     return (
-      <>{ filteredComponents.map((component, index) => (
-          <span key={index} id={component.id} className={component.className} data-wordiness={wordiness}>{component.body}</span>
+      <>{ filteredComponents.map((Component, index) => (
+          <span key={index} id={Component.id} className={Component.className} data-wordiness={wordiness}><Component.body/></span>
         )) }</>
     );
 
@@ -60,17 +60,20 @@ class BaseComponent extends Component {
       if (!post)
         post = await this.getResourceFunction()(postName);
 
-      const wordiness = this.props.wordiness || post.wordiness || 0;
+      let getWordiness = () => 0;
+      if (this.props.wordiness) getWordiness = this.props.wordiness;
+      else if (post.wordiness) getWordiness = () => post.wordiness;
+
 
       this.setState({post:{...this.state.post, ...post}});
 
       if (this.state.evaluateDynamicContent)
-        getComponents(post, this, wordiness);
+        getComponents(post, this, getWordiness);
 
       else {
         post.ContentComponents = [{
-          body: (<>{post.content}</>),
-          wordiness
+          body: (() => (<>{post.content}</>)),
+          wordiness: getWordiness()
         }];
         this.setState({post: {...this.state.post, ContentComponents: post.ContentComponents}});
       }
@@ -95,7 +98,7 @@ class BaseComponent extends Component {
         subtitle: '',
         subtitle_id: '',
         subtitle_class: '',
-        ContentComponents: [{body:(<></>), wordiness:0}],
+        ContentComponents: [{body:(()=>(<></>)), wordiness:0}],
         content: '',
         content_id: '',
         content_class: '',
@@ -188,13 +191,10 @@ class SkillComponent extends Component {
 }
 
 class SkillContainer extends Component {
-  constructor(props) {
-    super(props);
-    console.log('hi')
-  }
 
   render() {
-    const { wordiness } = this.props || {wordiness:0};
+    let wordiness = 0;
+    if (this.props.wordiness) wordiness = this.props.wordiness();
     const skills = this.props.skillList.filter(skill => skill.wordiness <= wordiness);
     return (
       <div className="skillcontainer">

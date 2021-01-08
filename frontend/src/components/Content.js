@@ -27,6 +27,8 @@ class Content extends BaseComponent {
 
   render() {
     const { sections } = this.state;
+    let getWordiness = () => 0;
+    if (this.props.wordiness) getWordiness = this.props.wordiness;
     return (
       <>
         {
@@ -35,7 +37,7 @@ class Content extends BaseComponent {
             if (index > 0) {
               out = (
                 <div id={`pageSection${index}`} key={index}>
-                  <BaseComponent functions={this.props.functions || {}} postObject={sectionObject} wordiness={ this.props.wordiness || 0 }/>
+                  <BaseComponent functions={this.props.functions || {}} postObject={sectionObject} wordiness={getWordiness}/>
                 </div>
               );
             }
