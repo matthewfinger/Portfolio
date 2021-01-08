@@ -18,20 +18,19 @@ class BaseComponent extends Component {
   }
 
   ContentBody = () => {
-    const { ContentComponents, content } = this.state.post;
-    const { evaluateDynamicContent } = this.state;
-    const wordiness = this.props.wordiness || 0;
+    let { ContentComponents, content } = this.state.post;
+    let { evaluateDynamicContent } = this.state;
+    let wordiness = this.props.wordiness || 0;
 
     //only include components of the body that aren't too wordy
-    const filteredComponents = ContentComponents.filter(component => component.wordiness <= wordiness);
-
+    let filteredComponents = ContentComponents.filter(component => component.wordiness <= wordiness);
     if (!evaluateDynamicContent)
       return (<span data-wordiness={wordiness}>{content}</span>);
 
     return (
-      <>{filteredComponents.map(component => (
-          <span id={component.id} className={component.className} data-wordiness={wordiness}>{component.body}</span>
-        ))}</>
+      <>{ filteredComponents.map((component, index) => (
+          <span key={index} id={component.id} className={component.className} data-wordiness={wordiness}>{component.body}</span>
+        )) }</>
     );
 
   }
@@ -63,16 +62,18 @@ class BaseComponent extends Component {
 
       const wordiness = this.props.wordiness || post.wordiness || 0;
 
+      this.setState({post:{...this.state.post, ...post}});
 
       if (this.state.evaluateDynamicContent)
-        post.ContentComponents = getComponents(post.content, wordiness);
-      else
+        getComponents(post, this, wordiness);
+
+      else {
         post.ContentComponents = [{
           body: (<>{post.content}</>),
           wordiness
-        }]
-
-      this.setState({post:{...this.state.post, ...post}});
+        }];
+        this.setState({post: {...this.state.post, ContentComponents: post.ContentComponents}});
+      }
     } catch (error) {
       console.warn(error);
     }
@@ -157,4 +158,50 @@ class ImageComponent extends BaseComponent {
   }
 }
 
-export { BaseComponent, ImageComponent }
+class SkillComponent extends Component {
+  requiredProperties = ['name', 'description'];
+
+  ImageBanner = () => {
+    const skillObject = this.props.skillObject;
+    if (!skillObject.image)
+      return (<></>);
+    return (<img alt="" className="imagebanner" href={skillObject.image} />);
+  }
+
+  render() {
+    const skillObject = this.props.skillObject || {};
+
+    for (let i = 0; i < this.requiredProperties.length; i++) {
+      if (!Object.keys(skillObject).includes(this.requiredProperties[i]))
+        return (<></>);
+    }
+    return (
+      <div className="outerskillbox">
+        <div className="innerskillbox">
+          <this.ImageBanner />
+          <h1 className="skillname">{skillObject.name}</h1>
+          <p className="skilldescription">{skillObject.description}</p>
+        </div>
+      </div>
+    )
+  }
+}
+
+class SkillContainer extends Component {
+  constructor(props) {
+    super(props);
+    console.log('hi')
+  }
+
+  render() {
+    const { wordiness } = this.props || {wordiness:0};
+    const skills = this.props.skillList.filter(skill => skill.wordiness <= wordiness);
+    return (
+      <div className="skillcontainer">
+        { skills.map((skill, index) => (<SkillComponent key={index} skillObject={skill} />)) }
+      </div>
+    );
+  }
+}
+
+export { BaseComponent, ImageComponent, SkillContainer, SkillComponent }

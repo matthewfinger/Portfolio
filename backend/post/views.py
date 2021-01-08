@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Post, Image
-from .serializers import PostSerializer, ImageSerializer
+from .models import Post, Image, Skill
+from .serializers import PostSerializer, ImageSerializer, SkillSerializer
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -99,4 +99,53 @@ def post_detail(request, pk=None, name=None, format=None):
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+
+#get ALL skills & POST a new skill
+@api_view(['GET','POST'])
+def skill_list(request, format=None):
+    if request.method == 'GET':
+        skills = Skill.objects.all()
+        serializer = SkillSerializer(skills, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = SkillSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def skill_detail(request, pk=None, name=None, format=None):
+    args = {}
+    if pk:
+        args['pk'] = pk
+    elif name:
+        args['name'] = name
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        skill = Skill.objects.get(**args)
+    except Image.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = SkillSerializer(skill)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = SkillSerializer(skill, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        skill.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
     return Response(status=status.HTTP_400_BAD_REQUEST)

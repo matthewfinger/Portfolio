@@ -162,3 +162,39 @@ html {
 .pageSection .post_content {
   font-size: 20px;
 }
+
+.skillcontainer {
+  align-items: stretch;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.outerskillbox {
+  box-sizing: border-box;
+  /*margin: 0.7em;*/
+  padding: 1em;
+  width: 25%;
+  min-width: 200px;
+}
+
+.innerskillbox {
+  box-sizing: border-box;
+  padding: 1em;
+  border-radius: 10px;
+  background: #229de7; /* the default (every three starting on the THIRD) */
+  height: 100%;
+}
+
+/* every three starting with the FIRST*/
+.outerskillbox:nth-child(3n+1) .innerskillbox {
+  background: #f02929;
+}
+
+/* every three starting wtih the SECOND */
+.outerskillbox:nth-child(3n+2) .innerskillbox {
+  background: #2bd609;
+}
+
+.skillbox .skillname {
+  font-size: 24px !important;
+}

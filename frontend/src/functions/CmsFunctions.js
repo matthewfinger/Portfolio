@@ -1,11 +1,18 @@
-import { ImageComponent } from '../components/BaseComponent'
-import { getPost, getImage, getSections } from './HTTPClient'
+import { ImageComponent, SkillContainer } from '../components/BaseComponent'
+import { getPost, getImage, getSections, fetchList } from './HTTPClient'
 const functions = { getPost, getImage, getSections };
+
+//the intended use if this table is to map names of functions (strings) to functions (js)
+//mainly for to eval tags from the backend
+//each function SHOULD take in a 'props' arg
+const postFunctions = {
+  "SkillList" : props => (<SkillContainer skillList={props.list} wordiness={props.wordiness} />)
+};
 
 
 //expects a 'tag', which'll be a string, in enclosed in '[%' and '%]'
 //returns an object with a react component as the 'body' property, and the 'wordiness' as a property as well
-function evalTag(tag, wordiness=0) {
+async function evalTag(tag, wordiness=0) {
   let out = { wordiness, body: (<span></span>) };
 
   tag = tag.replaceAll(/\[%\s*|\s*%\]/g, '');
@@ -26,6 +33,20 @@ function evalTag(tag, wordiness=0) {
       out.body = (<ImageComponent functions={functions} imageName={values[1]} imageOnly={true} id={out.imgId || out.id}/>);
       if (!out.imgId)
         delete out.id; //we don't want the parent obj to have the same id
+      break;
+    case 'list':
+      if (values.length >= 3 && postFunctions[values[2]]) {
+        const list = await fetchList(values[1]);
+        try {
+          const props = {
+            ...out,
+            list
+          }
+          out.body = postFunctions[values[2]](props);
+        } catch (err) {
+          console.warn(err);
+        }
+      }
       break;
     default:
       values = values.filter(val => !val.includes('='));
@@ -67,15 +88,18 @@ function getSegments(textStr, staticVals=true, dynamicVals=true) {
 
 //takes the main text as an input, and returns a list of objects (to be rendered)
 //each object in the list will have at least a 'body', and a 'wordiness' property
-function getComponents(textStr, wordiness=0) {
+async function getComponents(post, parentComponent, wordiness=0) {
+  const textStr = post.content || post.textStr;
   let components = [];
   try {
     let segments = getSegments(textStr);
-    segments.forEach(segment => {
+    let segment = [];
+    for (let i = 0; i < segments.length; i++) {
+      segment = segments[i]
 
       if (segment[1]) {
         //dynamic content
-        let evaluatedTag = evalTag(segment[0], wordiness)
+        let evaluatedTag = await evalTag(segment[0], wordiness)
         components.push(evaluatedTag);
       } else {
         //static content
@@ -84,7 +108,7 @@ function getComponents(textStr, wordiness=0) {
           wordiness
         });
       }
-    });
+    }
 
   } catch (error) {
     console.warn(error);
@@ -94,7 +118,16 @@ function getComponents(textStr, wordiness=0) {
     });
   }
 
-  return components;
+
+
+  parentComponent.setState({
+    post : {
+    ...parentComponent.state.post,
+    ...post,
+    ContentComponents: components
+  }})
+
+
 }
 
 

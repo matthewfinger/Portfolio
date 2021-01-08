@@ -11,6 +11,8 @@ urlpatterns = [
     path('image/', views.image_list),
     path('image/name/<str:name>', views.image_detail),
     path('image/<int:pk>', views.image_detail),
+    path('skills/', views.skill_list),
+    path('skills/<int:pk>', views.skill_detail),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

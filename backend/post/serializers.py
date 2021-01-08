@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Image
+from .models import Post, Image, Skill
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -15,3 +15,9 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Image
         fields = ['id', 'name','image']
+
+
+class SkillSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Skill
+        fields = ['id', 'name','wordiness', 'order_key', 'description', 'image']
