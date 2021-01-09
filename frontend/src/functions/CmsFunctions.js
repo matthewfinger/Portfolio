@@ -49,6 +49,13 @@ async function evalTag(tag, getWordiness=()=>0) {
         }
       }
       break;
+    case 'newline':
+      out.body = () => (<br />);
+      break;
+    case 'italic':
+      values = values.filter(val => !val.includes('=')).slice(1);
+      out.body = () => (<i>{values.join(' ')}</i>);
+      break;
     default:
       values = values.filter(val => !val.includes('='));
       out.body = () => (<span>{values.join(' ')}</span>);

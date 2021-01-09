@@ -54,7 +54,7 @@ class Content extends BaseComponent {
 class MainContent extends Content {
   render() {
     return (
-      <section className='pageSection'>
+      <section className={this.state.post.container_class}>
         <div>
           <this.Title />
           <this.Subtitle />

@@ -24,12 +24,13 @@ class BaseComponent extends Component {
 
     //only include components of the body that aren't too wordy
     let filteredComponents = ContentComponents.filter(component => component.wordiness <= wordiness);
+    filteredComponents = filteredComponents.map(component => {return { ...component, Body:component.body };});
     if (!evaluateDynamicContent)
       return (<span data-wordiness={wordiness}>{content}</span>);
 
     return (
       <>{ filteredComponents.map((Component, index) => (
-          <span key={index} id={Component.id} className={Component.className} data-wordiness={wordiness}><Component.body/></span>
+          <span key={index} id={Component.id} className={Component.className} data-wordiness={wordiness}><Component.Body/></span>
         )) }</>
     );
 
@@ -195,7 +196,7 @@ class SkillContainer extends Component {
   render() {
     let wordiness = 0;
     if (this.props.wordiness) wordiness = this.props.wordiness();
-    const skills = this.props.skillList.filter(skill => skill.wordiness <= wordiness);
+    let skills = this.props.skillList.filter(skill => skill.wordiness <= wordiness);
     return (
       <div className="skillcontainer">
         { skills.map((skill, index) => (<SkillComponent key={index} skillObject={skill} />)) }

@@ -41,7 +41,7 @@ class App extends Component {
           getWordiness={getWordiness}
         />
         <article id="pageContent">
-          <MainContent functions={ functions } postName='Content' wordiness={getWordiness}/>
+          <MainContent functions={ functions } postName='Main Content' wordiness={getWordiness}/>
           <Content functions={ functions } wordiness={getWordiness}/>
         </article>
         <Footer functions={ functions } postName='Footer'/>
