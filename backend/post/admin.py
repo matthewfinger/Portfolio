@@ -2,7 +2,7 @@ from django.contrib import admin
 from . import models
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('name','title','wordiness','id',)
+    list_display = ('name','title','order_key','wordiness','id',)
 
 class ImageAdmin(admin.ModelAdmin):
     list_display = ('name','image','id',)

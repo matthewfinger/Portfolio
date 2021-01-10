@@ -59,7 +59,7 @@ async function getSections(url=default_base_url+'post/sections/') {
     });
     if (response.status !== 200) throw Error('4**, something went wrong when fetching sections');
     let output = await response.json();
-    if (Array.isArray(output)) output = output.sort((elem1, elem2) => elem1.order_key > elem2.order_key);
+    if (Array.isArray(output)) output.sort((elem1, elem2) => (elem1.order_key > elem2.order_key ? 1 : -1));
     return output;
   } catch (error) {
     console.warn(error);
