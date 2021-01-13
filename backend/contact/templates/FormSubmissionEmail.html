@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <style>
+      h1 {
+        font-size: 25px;
+        font-weight: bolder;
+      }
+      p {
+        font-size: 20px;
+      }
+      h3 {
+        font-size: 25px;
+        font-weight: bold;
+        margin-top: 20px;
+      }
+
+      table, th, td {
+        border: 1px solid;
+        border-collapse: collapse;
+      }
+
+      td {
+        padding: 2px;
+      }
+
+      .light {
+        background: #fff !important;
+      }
+
+      .grey {
+        background: #eee !important;
+      }
+
+      .light > td, .grey > td {
+        color: #222 !important;
+        width: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Form submission from <a href='mattfinger.info'>mattfinger.info</a></h1>
+    <p>On {{ message.date|date:'m/d/Y' }} at {{ message.date|date:"P" }}, someone submitted:<br>{{ message.text }}</p>
+    {# Contact info Submitted #}
+    <h3>Contact Information</h3>
+    <table>
+      {% for contact_pair in contact_pairs %}
+        <tr class="{% if forloop.counter|divisibleby:'2' %}grey{% else %}light{% endif %}">
+          <td>{{ contact_pair.k }}</td><td>{{ contact_pair.v }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+
+  </body>
+</html>

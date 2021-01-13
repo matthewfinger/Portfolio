@@ -17,15 +17,18 @@ code {
     monospace;
 }
 
+iframe {
+  width: 100%;
+  border: none;
+  padding: none;
+  margin: none;
+}
+
 html {
-  background: #333;
+  background: #222;
   color: #f0f0f0;
   scroll-behavior: smooth;
   overflow-x: hidden !important;
-}
-/*Just testing some stuff out*/
-#animg {
-  width: 5vw;
 }
 
 #pageContent {
@@ -58,9 +61,10 @@ html {
 }
 
 #pageFooter {
-  bottom: 5vh;
+  bottom: calc(5vh + 50px);
   position: fixed;
   width: 100vw;
+  height: 0px;
   z-index: 3;
 }
 
@@ -75,7 +79,7 @@ html {
 
 #pageFooter > div {
   align-items: center;
-  background: #0c0c0c88;
+  background: #333;
   border-radius: 10px;
   display: flex;
   flex-direction: row;
@@ -98,7 +102,7 @@ html {
 
 #pageNav ul {
   align-items: center;
-  background: #0c0c0cbb;
+  background: #333;
   border-radius: 8px;
   display: flex;
   flex-direction: row;
@@ -156,6 +160,7 @@ html {
   border-radius: 5px;
   font-size: 14px;
   font-family: arial;
+  box-shadow: 2px 2px 4px #000a;
   font-weight: 600;
   flex-grow: 1;
   height: 30px;
@@ -256,6 +261,10 @@ html {
 
 .pageSection {
   padding-top: 10vh;
+}
+
+.post_content {
+  font-size: 18px;
 }
 
 * {

@@ -1,9 +1,8 @@
 let BREAKPOINT_PAIRS = [];
 
 
-
 function registerBreakpoint(querySelector, breakpointTable) {
-  let elements = Array(document.querySelector(`${querySelector}`));
+  let elements = () => Array(document.querySelector(`${querySelector}`));
 
   if (!breakpointTable.lastKey)
     breakpointTable.lastKey = null;
@@ -29,13 +28,13 @@ function evaluateBreakpoint(breakpointPair) {
   let currentKey = getCurrentBreakpointKey(breakpointTable);
   if (breakpointTable.lastKey === currentKey) return;
 
-  let elements = breakpointPair[0];
+  let elements = breakpointPair[0]();
   let callback = breakpointTable[currentKey];
   elements.forEach(element => {
     callback(element);
   });
-
-  breakpointTable.lastKey = currentKey;
+  if (!elements[0].type == 'iframe')
+    breakpointTable.lastKey = currentKey;
 }
 
 function hideElement(element) {
@@ -52,10 +51,28 @@ function showElement(element) {
   element.style.visibility = 'visible';
 }
 
-window.onload = () => {
+function sizeIframe(element) {
+  if (element && element.contentWindow) {
+    try {
+      element.style.height = element.contentWindow.document.body.scrollHeight + 'px';
+    } catch (error) {
+      element.style.height = '1000px';
+    }
+  }
+}
+
+document.body.onload = () => {
 
   //register the logo hide breakpoint
   registerBreakpoint('#section1LogoContainer', {'1023': hideElement, '1024': showElement});
+  //registerBreakpoint('#contactform', {'500': sizeIframe, '501': sizeIframe});
   //BREAKPOINT_PAIRS.forEach(pair => evaluateBreakpoint(pair));
   window.setInterval(() => BREAKPOINT_PAIRS.forEach(pair => evaluateBreakpoint(pair)), 50);
+  console.log('hi')
+  const contactform = () => document.getElementById('contactform');
+  let contactforminterval = setInterval(() => {
+    if (contactform()) {
+      contactform().onload = e => sizeIframe(e.target);
+    }
+  }, 50)
 }

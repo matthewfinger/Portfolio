@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-Frame-Options" content="ALLOW FROM *">
+    <title>Let's get in touch!</title>
+    <style media="screen">
+      *{
+        box-sizing: border-box;
+        border-radius: 5px;
+        font-family: arial;
+        max-width: 100%;
+        overflow-x: hidden;
+        color: #f0f0f0;
+      }
+
+      form {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
+        width: 100%;
+        max-width: 700px;
+      }
+
+      form div {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
+        flex-grow: 1;
+      }
+
+      form div p {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        margin: min(3%, 20px);
+        margin-top: 0px;
+        padding: 2px;
+      }
+
+      input, textarea {
+        color: #333333;
+        background: #eed;
+        min-height: 30px;
+        border: none;
+        margin: 5px 3px;
+        padding: 5px;
+        max-width: 100%;
+        box-shadow: 2px 2px 4px #000a;
+        transition: background 0.2s;
+      }
+
+      input:hover, textarea:hover, input:active, textarea:active {
+        background: #ffe;
+      }
+
+      input {
+        width: 250px;
+      }
+
+      label {
+        font-size: 18px;
+      }
+
+      input[type=submit] {
+        background: #2bd609;
+        font-size: 18px;
+        font-weight: bold;
+        color: #f0f0f0;
+        margin: 20px;
+        padding: 10px 8px;
+        width: auto;
+      }
+
+      input[type=submit]:hover, input[type=submit]:active {
+        background: #3cff14;
+      }
+
+      .disclaimer, .disclaimer>u {
+        font-size: 10px;
+        color: #888;
+      }
+
+      #messageForm {
+        width: 500px;
+      }
+    </style>
+  </head>
+  <body>
+    <form method="post">{% csrf_token %}
+      <div id="messageForm">
+        {{ message_form.as_p }}
+      </div>
+      <div id="contactForm">
+        {{ contact_form.as_p }}
+      </div>
+      <div>
+        <input type="submit" value="Send Message!">
+        <span class='disclaimer'>*By clicking 'Send Message!', I agree to be contacted via the email address, the phone number, and/or any other method of contact provided in this form. Information submitted is proprietary and confidential, and therefore will <u>not</u> be solicited to, shared with, or otherwise intentionally exposed to any third party. </span>
+      </div>
+
+    </form>
+  </body>
+</html>

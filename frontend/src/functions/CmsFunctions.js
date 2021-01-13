@@ -27,10 +27,10 @@ async function evalTag(tag, getWordiness=()=>0) {
 
   // try to ensure the wordiness is a valid Number
   out.wordiness = Number(out.wordiness) || getWordiness();
+  const tempOut = { ...out };
 
   switch (values[0]) {
     case 'img':
-      const tempOut = { ...out };
       out.body = () => (<ImageComponent functions={functions} imageName={values[1]} imageOnly={true} id={tempOut.imgId || tempOut.id}/>);
       if (!out.imgId)
         delete out.id; //we don't want the parent obj to have the same id
@@ -49,15 +49,44 @@ async function evalTag(tag, getWordiness=()=>0) {
         }
       }
       break;
-    case 'newline':
-      out.body = () => (<br />);
+    case 'frame':
+      out.body = () => (<></>);
+      if (values.length >= 2) {
+        out.body = () => (<iframe id={ tempOut.frameid || tempOut.id || ''} src={values[1]} width={tempOut.width || 'auto'} height={tempOut.height || 'auto'}></iframe>);
+        if (!tempOut.frameid && tempOut.id) delete out.id;
+      }
       break;
+    case 'nl':
+    case 'newline':
+      let lineCount = 1;
+      if (values[1] && Number(values[1]) > 0)
+        lineCount = Number(values[1]).toPrecision(1);
+
+      let lineBreaks = [];
+      for (let i = 0; i < lineCount; i++) {
+        lineBreaks.push((<br key={i} />))
+      }
+      out.body = () => (<>{lineBreaks}</>);
+      break;
+    case 'bold':
+    case 'underline':
     case 'italic':
-      values = values.filter(val => !val.includes('=')).slice(1);
-      out.body = () => (<i>{values.join(' ')}</i>);
+      const styles = ['bold', 'underline','italic'];
+      let selectedStyles = {};
+      let stylesSpecified = 0;
+      styles.forEach(style => {
+        selectedStyles[style] = values.slice(0, styles.length).includes(style)
+        if (selectedStyles[style]) stylesSpecified++;
+      });
+      values = values.slice(stylesSpecified).filter(val => !val.includes('=')).map(val => val.replaceAll('\\s', ' '));
+      let styledContent = (<>{values.join(' ')}</>);
+      if (selectedStyles['italic']) styledContent = (<i>{styledContent}</i>);
+      if (selectedStyles['bold']) styledContent = (<b>{styledContent}</b>);
+      if (selectedStyles['underline']) styledContent = (<u>{styledContent}</u>);
+      out.body = () => styledContent;
       break;
     default:
-      values = values.filter(val => !val.includes('='));
+      values = values.filter(val => !val.includes('=')).map(val => val.replaceAll('\\s', ' '));
       out.body = () => (<span>{values.join(' ')}</span>);
   }
 
