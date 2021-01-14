@@ -41,7 +41,7 @@
   </head>
   <body>
     <h1>Form submission from <a href='mattfinger.info'>mattfinger.info</a></h1>
-    <p>On {{ message.date|date:'m/d/Y' }} at {{ message.date|date:"P" }}, someone submitted:<br>{{ message.text }}</p>
+    <p>On {{ message.date|date:'m/d/Y' }} at {{ message.date|date:"P" }}, {{ name }} submitted the following:<br><br>{{ message.text }}</p>
     {# Contact info Submitted #}
     <h3>Contact Information</h3>
     <table>

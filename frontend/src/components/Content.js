@@ -36,7 +36,7 @@ class Content extends BaseComponent {
             let out = (<span key={index}></span>);
             if (index > 0) {
               out = (
-                <div id={`pageSection${index}`} key={index}>
+                <div id={`pageSection${index}`} className="bigsection" key={index}>
                   <BaseComponent functions={this.props.functions || {}} postObject={sectionObject} wordiness={getWordiness}/>
                 </div>
               );
@@ -57,6 +57,7 @@ class MainContent extends Content {
       <section className={this.state.post.container_class}>
         <div>
           <this.Title />
+          <hr/>
           <this.Subtitle />
           <this.Content />
         </div>

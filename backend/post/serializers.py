@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import Post, Image, Skill
+from .models import Post, Image, Skill, Sample
 
-class PostSerializer(serializers.HyperlinkedModelSerializer):
+class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['id', 'name', 'is_section', 'container_id', 'container_class', 'wordiness', 'order_key']
@@ -11,13 +11,18 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
                 fields.append('%s_%s' % (base, addition))
 
 
-class ImageSerializer(serializers.HyperlinkedModelSerializer):
+class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
-        fields = ['id', 'name','image']
+        fields = ['id', 'name', 'image']
 
 
-class SkillSerializer(serializers.HyperlinkedModelSerializer):
+class SkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skill
-        fields = ['id', 'name','wordiness', 'order_key', 'description', 'image']
+        fields = ['id', 'name', 'wordiness', 'order_key', 'description', 'image']
+
+class SampleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sample
+        fields = ['id', 'name', 'href', 'wordiness', 'order_key', 'description', 'image']

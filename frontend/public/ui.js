@@ -68,7 +68,6 @@ document.body.onload = () => {
   //registerBreakpoint('#contactform', {'500': sizeIframe, '501': sizeIframe});
   //BREAKPOINT_PAIRS.forEach(pair => evaluateBreakpoint(pair));
   window.setInterval(() => BREAKPOINT_PAIRS.forEach(pair => evaluateBreakpoint(pair)), 50);
-  console.log('hi')
   const contactform = () => document.getElementById('contactform');
   let contactforminterval = setInterval(() => {
     if (contactform()) {

@@ -10,6 +10,10 @@ class ImageAdmin(admin.ModelAdmin):
 class SkillAdmin(admin.ModelAdmin):
     list_display = ('name','order_key','wordiness','id',)
 
+class SampleAdmin(admin.ModelAdmin):
+    list_display = ('name','href','order_key','wordiness','id',)
+
 admin.site.register(models.Post, PostAdmin)
 admin.site.register(models.Image, ImageAdmin)
 admin.site.register(models.Skill, SkillAdmin)
+admin.site.register(models.Sample, SampleAdmin)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { getPost, getImage, getSections } from '../functions/HTTPClient'
+import { getPost, getImage, getSections, default_base_url } from '../functions/HTTPClient'
 import { getComponents } from '../functions/CmsFunctions'
 const { Component } = React;
 
@@ -116,6 +116,7 @@ class BaseComponent extends Component {
     return (
       <div id={this.state.post.container_id} className={this.state.post.container_class}>
         <this.Title />
+        <hr/>
         <this.Subtitle />
         <this.Content />
       </div>
@@ -165,11 +166,26 @@ class ImageComponent extends BaseComponent {
 class SkillComponent extends Component {
   requiredProperties = ['name', 'description'];
 
+  constructor(props) {
+    super(props);
+    this.state = {imageUrl: ''};
+  }
+
   ImageBanner = () => {
     const skillObject = this.props.skillObject;
-    if (!skillObject.image)
+    const imageUrl = this.state.imageUrl;
+
+    if (!skillObject.image || !imageUrl) {
+      const callback = res => this.setState({imageUrl: default_base_url + res.image});
+      if (skillObject.image) {
+        getImage(skillObject.image, false)
+          .then(callback);
+      }
+
       return (<></>);
-    return (<img alt="" className="imagebanner" href={skillObject.image} />);
+    }
+
+    return (<img alt={skillObject.name} className="imagebanner" src={imageUrl} />);
   }
 
   render() {
@@ -184,6 +200,7 @@ class SkillComponent extends Component {
         <div className="innerskillbox">
           <this.ImageBanner />
           <h1 className="skillname">{skillObject.name}</h1>
+          <hr/>
           <p className="skilldescription">{skillObject.description}</p>
         </div>
       </div>
@@ -205,4 +222,86 @@ class SkillContainer extends Component {
   }
 }
 
-export { BaseComponent, ImageComponent, SkillContainer, SkillComponent }
+class SampleComponent extends Component {
+  requiredProperties = ['name', 'description', 'href'];
+  fetchedComponents = false;
+
+  constructor(props) {
+    super(props);
+    this.state = {imageUrl: '', components: []};
+  }
+
+  ImageBanner = () => {
+    const sampleObject = this.props.sampleObject;
+    const imageUrl = this.state.imageUrl;
+
+    if (!sampleObject.image || !imageUrl) {
+      const callback = res => this.setState({imageUrl: default_base_url + res.image});
+
+      if (sampleObject.image) {
+        getImage(sampleObject.image, false)
+          .then(callback);
+      }
+
+      return (<></>);
+    }
+
+    return (<img alt={sampleObject.name} className="imagebanner" src={imageUrl} />);
+  }
+
+  render() {
+    const sampleObject = this.props.sampleObject || {};
+
+    for (let i = 0; i < this.requiredProperties.length; i++) {
+      if (!Object.keys(sampleObject).includes(this.requiredProperties[i]))
+        return (<></>);
+    }
+
+    if (!this.fetchedComponents) {
+      const callback = components => this.setState({components});
+      this.fetchedComponents = true;
+      getComponents({textStr:sampleObject.description}, null, () => 0, true)
+        .then(async coms => coms.map(component => component.body))
+        .then(callback);
+    }
+
+
+
+    return (
+      <div className="outersamplebox">
+        <div className="innersamplebox">
+          <this.ImageBanner />
+          <a href={sampleObject.href} className="sampleAnchor" target="_blank" rel="noreferrer">
+            <h1 className="samplename">{sampleObject.name}</h1>
+            <h4 className="sampleurl">{sampleObject.href}</h4>
+          </a>
+          <hr/>
+          <p className="sampledescription">{this.state.components.map((C, index) => (<span key={index}><C /></span>))}</p>
+        </div>
+      </div>
+    )
+  }
+}
+
+class SampleContainer extends Component {
+
+  render() {
+    let wordiness = 0;
+    if (this.props.wordiness) wordiness = this.props.wordiness();
+    let samples = this.props.sampleList.filter(sample => sample.wordiness <= wordiness);
+    return (
+      <div className="samplecontainer">
+        { samples.map((sample, index) => (<SampleComponent key={index} sampleObject={sample} />)) }
+      </div>
+    );
+  }
+}
+
+export {
+  BaseComponent,
+  ImageComponent,
+  SkillContainer,
+  SkillComponent,
+  SampleContainer,
+  SampleComponent
+}

@@ -2,15 +2,18 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-Frame-Options" content="ALLOW FROM *">
     <title>Let's get in touch!</title>
     <style media="screen">
+      html, body {
+        padding: 0px;
+        margin: 0px;
+      }
       *{
         box-sizing: border-box;
         border-radius: 5px;
         font-family: arial;
         max-width: 100%;
-        overflow-x: hidden;
+        /* overflow-x: hidden; */
         color: #f0f0f0;
       }
 
@@ -30,6 +33,7 @@
       }
 
       form div p {
+        overflow: visible;
         flex-grow: 1;
         display: flex;
         flex-direction: column;
@@ -41,18 +45,19 @@
 
       input, textarea {
         color: #333333;
-        background: #eed;
+        background: #e5fffa;
         min-height: 30px;
         border: none;
         margin: 5px 3px;
         padding: 5px;
-        max-width: 100%;
+        max-width: 100vw;
         box-shadow: 2px 2px 4px #000a;
-        transition: background 0.2s;
+        transition: all 0.1s;
       }
 
-      input:hover, textarea:hover, input:active, textarea:active {
+      input:hover, textarea:hover, input:focus, textarea:focus {
         background: #ffe;
+        transform: scale(1.05);
       }
 
       input {
@@ -60,15 +65,16 @@
       }
 
       label {
-        font-size: 18px;
+        font-size: 16px;
+        font-weight: bold;
       }
 
       input[type=submit] {
-        background: #2bd609;
+        background: #80ff80;
         font-size: 18px;
         font-weight: bold;
-        color: #f0f0f0;
-        margin: 20px;
+        color: #333;
+        margin: 18px;
         padding: 10px 8px;
         width: auto;
       }
@@ -96,8 +102,8 @@
         {{ contact_form.as_p }}
       </div>
       <div>
-        <input type="submit" value="Send Message!">
-        <span class='disclaimer'>*By clicking 'Send Message!', I agree to be contacted via the email address, the phone number, and/or any other method of contact provided in this form. Information submitted is proprietary and confidential, and therefore will <u>not</u> be solicited to, shared with, or otherwise intentionally exposed to any third party. </span>
+        <input type="submit" value="Send Message">
+        <span class='disclaimer'>*By clicking 'Send Message', I agree to be contacted via the email address, the phone number, and/or any other method of contact provided in this form. Information submitted is proprietary and confidential, and therefore will <u>not</u> be solicited to, shared with, or otherwise intentionally exposed to any third party. </span>
       </div>
 
     </form>

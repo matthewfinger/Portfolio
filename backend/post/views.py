@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Post, Image, Skill
-from .serializers import PostSerializer, ImageSerializer, SkillSerializer
+from .models import Post, Image, Skill, Sample
+from .serializers import PostSerializer, ImageSerializer, SkillSerializer, SampleSerializer
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -147,5 +147,53 @@ def skill_detail(request, pk=None, name=None, format=None):
 
     elif request.method == 'DELETE':
         skill.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+#get ALL samples & POST a new sample
+@api_view(['GET','POST'])
+def sample_list(request, format=None):
+    if request.method == 'GET':
+        samples = Sample.objects.all()
+        serializer = SampleSerializer(samples, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = SampleSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def sample_detail(request, pk=None, name=None, format=None):
+    args = {}
+    if pk:
+        args['pk'] = pk
+    elif name:
+        args['name'] = name
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        sample = Sample.objects.get(**args)
+    except Image.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = SampleSerializer(sample)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = SampleSerializer(sample, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        sample.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     return Response(status=status.HTTP_400_BAD_REQUEST)

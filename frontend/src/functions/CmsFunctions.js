@@ -1,4 +1,4 @@
-import { ImageComponent, SkillContainer } from '../components/BaseComponent'
+import { ImageComponent, SkillContainer, SampleContainer } from '../components/BaseComponent'
 import { getPost, getImage, getSections, fetchList } from './HTTPClient'
 const functions = { getPost, getImage, getSections };
 
@@ -6,7 +6,8 @@ const functions = { getPost, getImage, getSections };
 //mainly for to eval tags from the backend
 //each function SHOULD take in a 'props' arg
 const postFunctions = {
-  "SkillList" : props => (<SkillContainer skillList={props.list} wordiness={props.getWordiness} />)
+  "SkillList" : props => (<SkillContainer skillList={props.list} wordiness={props.getWordiness} />),
+  "SampleList" : props => (<SampleContainer sampleList={props.list} wordiness={props.getWordiness} />)
 };
 
 
@@ -52,7 +53,7 @@ async function evalTag(tag, getWordiness=()=>0) {
     case 'frame':
       out.body = () => (<></>);
       if (values.length >= 2) {
-        out.body = () => (<iframe id={ tempOut.frameid || tempOut.id || ''} src={values[1]} width={tempOut.width || 'auto'} height={tempOut.height || 'auto'}></iframe>);
+        out.body = () => (<iframe id={ tempOut.frameid || tempOut.id || ''} src={values[1]} width={tempOut.width || 'auto'} height={tempOut.height || 'auto'} title={tempOut.title || 'Embedded Website'}></iframe>);
         if (!tempOut.frameid && tempOut.id) delete out.id;
       }
       break;
@@ -125,7 +126,7 @@ function getSegments(textStr, staticVals=true, dynamicVals=true) {
 
 //takes the main text as an input, and returns a list of objects (to be rendered)
 //each object in the list will have at least a 'body', and a 'wordiness' property
-async function getComponents(post, parentComponent, getWordiness=()=>0) {
+async function getComponents(post, parentComponent=null, getWordiness=()=>0, returnvals=false) {
   const textStr = post.content || post.textStr;
   let components = [];
   const BaseBody = seg => () => (<>{seg}</>);
@@ -157,15 +158,15 @@ async function getComponents(post, parentComponent, getWordiness=()=>0) {
   }
 
 
-
-  parentComponent.setState({
-    post : {
-    ...parentComponent.state.post,
-    ...post,
-    ContentComponents: components
-  }})
-
-
+  if (parentComponent) {
+    parentComponent.setState({
+      post : {
+      ...parentComponent.state.post,
+      ...post,
+      ContentComponents: components
+    }})
+  }
+  if (returnvals) return components;
 }
 
 

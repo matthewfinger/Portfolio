@@ -28,3 +28,12 @@ class Skill(models.Model):
     order_key = models.IntegerField(default=0, blank=True)
     description = models.TextField(max_length=1000, blank=True, default='')
     image = models.ForeignKey('Image', models.SET_NULL, blank=True, null=True)
+
+
+class Sample(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    wordiness = models.IntegerField(default=0, blank=True)
+    href = models.URLField(blank=True)
+    order_key = models.IntegerField(default=0, blank=True)
+    description = models.TextField(max_length=1000, blank=True, default='')
+    image = models.ForeignKey('Image', models.SET_NULL, blank=True, null=True)

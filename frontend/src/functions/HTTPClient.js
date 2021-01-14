@@ -1,7 +1,7 @@
-const default_base_url = 'http://localhost:8000/'
+const default_base_url = 'http://localhost:8000';
 
 //returns JWT containing the post and all the info about it
-async function getPost(postName=null, id=null, url=default_base_url+"post/") {
+async function getPost(postName=null, id=null, url=default_base_url+"/post/") {
   if (postName) {
     url += `name/${postName}`;
   } else if (id) {
@@ -27,7 +27,8 @@ async function getPost(postName=null, id=null, url=default_base_url+"post/") {
 }
 
 //gets a JWT containint the slug of the resource with the given name on the server
-async function getImage(imageName, url=default_base_url+"post/image/name/") {
+async function getImage(imageName, byName=true, url=default_base_url+"/post/image/") {
+  if (byName) url += 'name/';
   if (imageName) url += `${imageName}`;
   url += '?format=json';
   try {
@@ -49,7 +50,7 @@ async function getImage(imageName, url=default_base_url+"post/image/name/") {
 }
 
 //gets a JWT Array containing all sections to be rendered as content
-async function getSections(url=default_base_url+'post/sections/') {
+async function getSections(url=default_base_url+'/post/sections/') {
   try {
     const response = await fetch(url, {
       method: 'GET',
@@ -67,7 +68,7 @@ async function getSections(url=default_base_url+'post/sections/') {
   }
 }
 
-async function getSkills(url=default_base_url+'post/skills') {
+async function getSkills(url=default_base_url+'/post/skills') {
   let out = [];
   url += '?format=json';
   try {
@@ -118,4 +119,4 @@ async function fetchList(url) {
   return out;
 }
 
-export { getPost, getImage, getSections, getSkills, fetchList }
+export { getPost, getImage, getSections, getSkills, fetchList, default_base_url }

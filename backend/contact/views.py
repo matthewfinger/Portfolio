@@ -45,13 +45,26 @@ def ContactForm(request):
         email_context = {
             'message': message_obj,
             'contact_pairs': contact_info,
+            'name': 'someone',
         }
+
+        subject = "Form submission from your website"
+        name = ''
+
+        if contact_obj.first_name:
+            name += contact_obj.first_name
+        if contact_obj.last_name:
+            name += ' ' + contact_obj.last_name
+
+        if name:
+            subject = '{} | {}'.format(name, subject)
+            email_context['name'] = name
 
         html_message = render_to_string('FormSubmissionEmail.html', email_context)
         plain_message = strip_tags(html_message)
 
         send_mail(
-            subject="Form submission from your website",
+            subject,
             message=plain_message,
             from_email=contact_obj.email,
             recipient_list=['matthewfinger3@gmail.com'],

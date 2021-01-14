@@ -13,6 +13,8 @@ urlpatterns = [
     path('image/<int:pk>', views.image_detail),
     path('skills/', views.skill_list),
     path('skills/<int:pk>', views.skill_detail),
+    path('samples/', views.sample_list),
+    path('samples/<int:pk>', views.sample_detail),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
