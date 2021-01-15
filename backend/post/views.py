@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Post, Image, Skill, Sample
-from .serializers import PostSerializer, ImageSerializer, SkillSerializer, SampleSerializer
+from .models import *
+from .serializers import *
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -195,5 +195,53 @@ def sample_detail(request, pk=None, name=None, format=None):
 
     elif request.method == 'DELETE':
         sample.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+#footer item endpoints
+@api_view(['GET','POST'])
+def footer_item_list(request, format=None):
+    if request.method == 'GET':
+        footer_items = FooterItem.objects.all()
+        serializer = FooterItemSerializer(footer_items, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = FooterItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def footer_item_detail(request, pk=None, name=None, format=None):
+    args = {}
+    if pk:
+        args['pk'] = pk
+    elif name:
+        args['name'] = name
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        footer_item = FooterItem.objects.get(**args)
+    except Image.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = FooterItemSerializer(footer_item)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = FooterItemSerializer(footer_item, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        footer_item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     return Response(status=status.HTTP_400_BAD_REQUEST)

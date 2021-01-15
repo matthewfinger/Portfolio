@@ -7,13 +7,21 @@ class PostAdmin(admin.ModelAdmin):
 class ImageAdmin(admin.ModelAdmin):
     list_display = ('name','image','id',)
 
+class ResourceAdmin(admin.ModelAdmin):
+    list_display = ('name','resource','id',)
+
 class SkillAdmin(admin.ModelAdmin):
     list_display = ('name','order_key','wordiness','id',)
 
 class SampleAdmin(admin.ModelAdmin):
     list_display = ('name','href','order_key','wordiness','id',)
 
+class FooterItemAdmin(admin.ModelAdmin):
+    list_display = ('name','href','order_key','id',)
+
 admin.site.register(models.Post, PostAdmin)
 admin.site.register(models.Image, ImageAdmin)
+admin.site.register(models.Resource, ResourceAdmin)
 admin.site.register(models.Skill, SkillAdmin)
 admin.site.register(models.Sample, SampleAdmin)
+admin.site.register(models.FooterItem, FooterItemAdmin)

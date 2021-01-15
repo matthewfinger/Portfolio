@@ -1,20 +1,49 @@
-import { BaseComponent } from './BaseComponent'
+import { Component } from 'react'
+import { fetchList, getImage, default_base_url } from '../functions/HTTPClient'
 
-class Footer extends BaseComponent {
-  Content = () => {
-    const emailIconSrc = this.props.emailIconSrc || '/email_icon.png';
-    const phoneIconSrc = this.props.phoneIconSrc || '/phone_icon.png';
-    const linkedinIconSrc = this.props.linkedinIconSrc || '/LI-In-Bug.png';
-    const emailUrl = this.props.emailUrl || 'mailto:matthewfinger3@gmail.com';
-    const phoneUrl = this.props.phoneUrl || 'tel:2623081988';
-    const linkedinUrl = this.props.linkedinUrl || 'https://www.linkedin.com/in/matthew-finger-1b5766164?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BZmuEzprVTL25ZLP8TKxNyg%3D%3D';
+class FooterItem extends Component {
+  render() {
     return (
       <div>
-        <div><a href={emailUrl} target='_blank' rel='noreferrer'><img src={emailIconSrc} alt="email"/></a></div>
-        <div><a href={phoneUrl} target='_blank' rel='noreferrer'><img src={phoneIconSrc} alt="call me"/></a></div>
-        <div><a href={linkedinUrl} target='_blank' rel='noreferrer'><img src={linkedinIconSrc} alt="email"/></a></div>
+        <a href={this.props.footerItem.href} target='_blank' rel='noreferrer'>
+          <img src={this.props.footerItem.imageSrc} title={this.props.footerItem.name} alt={this.props.footerItem.name} />
+        </a>
+      </div>
+    )
+  }
+}
+
+class Footer extends Component {
+
+  Content = () => {
+    return (
+      <div>
+        { this.state.footerItems.map((footerItem, index) => (
+          <FooterItem key={index} footerItem={footerItem} />
+        )) }
       </div>
     );
+  }
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      footerItems: [] //from api
+    }
+  }
+
+  async componentDidMount() {
+    const footerItemsNoSrc = await fetchList(default_base_url + '/post/footer_items/');
+    let footerItems = [];
+    let imageSrc = '';
+    let imageObject = {};
+    for (let i = 0; i < footerItemsNoSrc.length; i++) {
+      imageObject = await getImage(footerItemsNoSrc[i].image, false);
+      imageSrc = imageObject.image ? default_base_url + imageObject.image : '';
+      footerItems.push({ ...footerItemsNoSrc[i], imageSrc });
+    }
+
+    this.setState({ footerItems });
   }
 
   render() {

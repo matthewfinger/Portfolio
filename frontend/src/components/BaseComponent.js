@@ -165,10 +165,11 @@ class ImageComponent extends BaseComponent {
 
 class SkillComponent extends Component {
   requiredProperties = ['name', 'description'];
+  fetchedComponents = false;
 
   constructor(props) {
     super(props);
-    this.state = {imageUrl: ''};
+    this.state = {imageUrl: '', components: []};
   }
 
   ImageBanner = () => {
@@ -182,10 +183,14 @@ class SkillComponent extends Component {
           .then(callback);
       }
 
-      return (<></>);
+      return (<span></span>);
     }
 
     return (<img alt={skillObject.name} className="imagebanner" src={imageUrl} />);
+  }
+
+  async componentDidMount() {
+
   }
 
   render() {
@@ -195,14 +200,27 @@ class SkillComponent extends Component {
       if (!Object.keys(skillObject).includes(this.requiredProperties[i]))
         return (<></>);
     }
+
+    if (!this.fetchedComponents) {
+      const callback = components => this.setState({components});
+      this.fetchedComponents = true;
+      getComponents({textStr:skillObject.description}, null, () => 0, true)
+        .then(async coms => coms.map(component => component.body))
+        .then(callback);
+    }
+
     return (
       <div className="outerskillbox">
-        <div className="innerskillbox">
-          <this.ImageBanner />
-          <h1 className="skillname">{skillObject.name}</h1>
+        <article className="innerskillbox">
+          <header className="skillheader">
+            <this.ImageBanner />
+            <h1 className="skillname">{skillObject.name}</h1>
+          </header>
           <hr/>
-          <p className="skilldescription">{skillObject.description}</p>
-        </div>
+          <section className="skilldescription">
+            { this.state.components.map((C, index) => (<span key={index}><C /></span>)) }
+          </section>
+        </article>
       </div>
     )
   }
@@ -276,7 +294,9 @@ class SampleComponent extends Component {
             <h4 className="sampleurl">{sampleObject.href}</h4>
           </a>
           <hr/>
-          <p className="sampledescription">{this.state.components.map((C, index) => (<span key={index}><C /></span>))}</p>
+          <div className="sampledescription">
+            {this.state.components.map((C, index) => (<span key={index}><C /></span>))}
+          </div>
         </div>
       </div>
     )

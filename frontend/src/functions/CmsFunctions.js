@@ -14,7 +14,7 @@ const postFunctions = {
 //expects a 'tag', which'll be a string, in enclosed in '[%' and '%]'
 //returns an object with a react component as the 'body' property, and the 'wordiness' as a property as well
 async function evalTag(tag, getWordiness=()=>0) {
-  let out = { getWordiness, wordiness:getWordiness(), body: (<span></span>) };
+  let out = { getWordiness, wordiness:0, body: (<span></span>) };
 
   tag = tag.replaceAll(/\[%\s*|\s*%\]/g, '');
   let values = tag.split(/\s+/);
@@ -27,7 +27,8 @@ async function evalTag(tag, getWordiness=()=>0) {
   });
 
   // try to ensure the wordiness is a valid Number
-  out.wordiness = Number(out.wordiness) || getWordiness();
+  out.wordiness = Number(out.wordiness) || 0;
+
   const tempOut = { ...out };
 
   switch (values[0]) {
@@ -57,6 +58,33 @@ async function evalTag(tag, getWordiness=()=>0) {
         if (!tempOut.frameid && tempOut.id) delete out.id;
       }
       break;
+    case 'link':
+    case 'download':
+      if (values.length < 2) break;
+      const download = !!(values[0] === 'download');
+      const href = values[1];
+      const content = values.slice(2).filter(v => !v.includes('=')).join(' ');
+      out.body = () => ( <a target="_blank" rel="noreferrer" href={href} download={download} className={ out.Class } id={ out.id }>{ content }</a> );
+      break;
+    case 'ulist':
+    case 'ul':
+    case 'unorderedlist':
+      //every substr seperated by '|' except the first
+      const subvals = values.join(' ').split(/\s*\|\s*/g).slice(1);
+      let subcomps = [];
+      let n;
+      for (let i = 0; i < subvals.length; i++) {
+        n = await evalTag(subvals[i]);
+        subcomps.push(n.body);
+      }
+
+      out.body = () => (
+        <ul className={"post_ul " + out.Class} id={out.id}>
+          { subcomps.map((Comp, index) => ( <li key={index}><Comp/></li> )) }
+        </ul>
+      );
+
+      break;
     case 'nl':
     case 'newline':
       let lineCount = 1;
@@ -80,7 +108,7 @@ async function evalTag(tag, getWordiness=()=>0) {
         if (selectedStyles[style]) stylesSpecified++;
       });
       values = values.slice(stylesSpecified).filter(val => !val.includes('=')).map(val => val.replaceAll('\\s', ' '));
-      let styledContent = (<>{values.join(' ')}</>);
+      let styledContent = (<span className={ out.Class } id={ out.id }>{values.join(' ')}</span>);
       if (selectedStyles['italic']) styledContent = (<i>{styledContent}</i>);
       if (selectedStyles['bold']) styledContent = (<b>{styledContent}</b>);
       if (selectedStyles['underline']) styledContent = (<u>{styledContent}</u>);
@@ -144,7 +172,7 @@ async function getComponents(post, parentComponent=null, getWordiness=()=>0, ret
         //static content
         components.push({
           body: BaseBody(segment[0]),
-          wordiness: getWordiness()
+          wordiness: 0
         });
       }
     }
@@ -153,7 +181,7 @@ async function getComponents(post, parentComponent=null, getWordiness=()=>0, ret
     console.warn(error);
     components.push({
       body: BaseBody(textStr),
-      wordiness: getWordiness()
+      wordiness: 0
     });
   }
 

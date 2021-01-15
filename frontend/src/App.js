@@ -16,7 +16,7 @@ class App extends Component {
 
     this.functions = { getPost, getImage, getSections };
     this.state = this.state || {};
-    this.state.wordinessLevel = 0;
+    this.state.wordinessLevel = 1;
 
   }
 

@@ -11,14 +11,16 @@ class Nav extends BaseComponent {
     try {
       const sectgroups = content.split(';');
       let sections = [];
+
       sectgroups.forEach(sectionstr => {
         let splitstr = sectionstr.split(',');
         sections.push({sectionName:splitstr[0], sectionId:splitstr[1]})
       });
+
       return (
-        <ul className='navUl'>
+        <ul className='navUl' id='navUl' data-toggler="#navToggle">
           <li id="navLogo">
-            <a href="#" id="navLogoLink"><img src="/logo.png"/></a>
+            <a href="#" id="navLogoLink"><img src="/logo.png"/><span className="mobileOnly">Top of Page</span></a>
           </li>
           {sections.map((section, index) =>
             <li key={index}>
@@ -36,6 +38,7 @@ class Nav extends BaseComponent {
   render() {
     return (
       <nav id="pageNav">
+        <div id="navToggle"><span>•••</span></div>
         <this.Content />
       </nav>
     )

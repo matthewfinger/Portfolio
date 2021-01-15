@@ -39,8 +39,15 @@ def ContactForm(request):
         contact_info = []
         contact_model = model_to_dict(contact_obj)
         for key in contact_model.keys():
+            href = ''
+            if key=='phone':
+                href = 'tel:%s' % contact_model[key]
+            elif key == 'email':
+                href = 'mailto:%s' % contact_model[key]
+            elif key == 'website':
+                href = 'http://%s' % contact_model[key]
             if contact_model[key]:
-                contact_info.append({'k': key, 'v': contact_model[key]})
+                contact_info.append({'k': key, 'v': contact_model[key], 'h':href})
 
         email_context = {
             'message': message_obj,

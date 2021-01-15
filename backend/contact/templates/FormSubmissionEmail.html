@@ -47,7 +47,7 @@
     <table>
       {% for contact_pair in contact_pairs %}
         <tr class="{% if forloop.counter|divisibleby:'2' %}grey{% else %}light{% endif %}">
-          <td>{{ contact_pair.k }}</td><td>{{ contact_pair.v }}</td>
+          <td>{{ contact_pair.k }}</td><td><a href={{ contact_pair.h }}>{{ contact_pair.v }}</a></td>
         </tr>
       {% endfor %}
     </table>

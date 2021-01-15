@@ -22,6 +22,16 @@ class Image(models.Model):
     name = models.CharField(max_length=100, unique=True)
     image = models.ImageField(upload_to="images/")
 
+    def __str__(self):
+        return '{}'.format(self.name)
+
+class Resource(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    resource = models.FileField(upload_to="uploads/")
+
+    def __str__(self):
+        return self.name
+
 class Skill(models.Model):
     name = models.CharField(max_length=100, unique=True)
     wordiness = models.IntegerField(default=0, blank=True)
@@ -36,4 +46,10 @@ class Sample(models.Model):
     href = models.URLField(blank=True)
     order_key = models.IntegerField(default=0, blank=True)
     description = models.TextField(max_length=1000, blank=True, default='')
+    image = models.ForeignKey('Image', models.SET_NULL, blank=True, null=True)
+
+class FooterItem(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    href = models.CharField(max_length=1000)
+    order_key = models.IntegerField(default=0, blank=True)
     image = models.ForeignKey('Image', models.SET_NULL, blank=True, null=True)

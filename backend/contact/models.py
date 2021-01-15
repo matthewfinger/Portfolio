@@ -6,7 +6,7 @@ class Contact(models.Model):
     company = models.CharField(max_length=200, blank=True)
     phone = models.CharField(max_length=15, blank=True)
     email = models.EmailField(blank=True)
-    website = models.URLField(blank=True)
+    website = models.CharField(max_length=100, blank=True)
     other_info = models.CharField(max_length=1000, blank=True)
 
 class Message(models.Model):

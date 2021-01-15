@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Image, Skill, Sample
+from .models import Post, Image, Skill, Sample, FooterItem
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,3 +26,8 @@ class SampleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sample
         fields = ['id', 'name', 'href', 'wordiness', 'order_key', 'description', 'image']
+
+class FooterItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FooterItem
+        fields = ['id', 'name', 'href', 'order_key', 'image']
