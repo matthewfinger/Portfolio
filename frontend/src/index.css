@@ -51,6 +51,10 @@ html {
   overflow-x: hidden !important;
 }
 
+nav .mobileOnly {
+  display: none;
+}
+
 #aboutmecontent {
   border-radius: 10px;
   background: #b3ebff;
@@ -85,6 +89,10 @@ html {
 #contact .contactlink:hover {
   transform: none;
   text-decoration: underline;
+}
+
+#contactform {
+  height: 1000px;
 }
 
 #pageContent {

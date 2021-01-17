@@ -4,7 +4,7 @@ import { Content, MainContent } from './components/Content'
 import Footer from './components/Footer'
 import { Options } from './components/Options'
 import { getPost, getImage, getSections, getSkills } from './functions/HTTPClient'
-//import UiFun from './ui'
+import UiFun from './ui'
 
 const { Component } = React;
 
@@ -25,7 +25,7 @@ class App extends Component {
     this.addskills = skills => this.setState({skills});
     getSkills()
       .then(this.addskills);
-    //UiFun();
+    UiFun();
   }
 
   incrementWordiness = () => this.setState({wordinessLevel: this.state.wordinessLevel + 1});

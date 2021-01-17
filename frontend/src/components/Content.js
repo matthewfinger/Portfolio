@@ -59,6 +59,7 @@ class MainContent extends Content {
           <this.Title />
           <hr/>
           <this.Subtitle />
+
           <this.Content />
         </div>
         <ImageComponent functions={this.state.functions} containerId="section1LogoContainer" id='section1Logo' imageName="Logo1" />

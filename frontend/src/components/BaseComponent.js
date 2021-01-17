@@ -1,6 +1,6 @@
-import React from 'react'
-import { getPost, getImage, getSections, default_base_url } from '../functions/HTTPClient'
-import { getComponents } from '../functions/CmsFunctions'
+import React from 'react';
+import { getPost, getImage, getSections, default_base_url } from '../functions/HTTPClient';
+import { getComponents } from '../functions/CmsFunctions';
 const { Component } = React;
 
 class BaseComponent extends Component {
@@ -29,9 +29,9 @@ class BaseComponent extends Component {
       return (<span data-wordiness={wordiness}>{content}</span>);
 
     return (
-      <>{ filteredComponents.map((Component, index) => (
+      <>{filteredComponents.map((Component, index) => (
           <span key={index} id={Component.id} className={Component.className} data-wordiness={wordiness}><Component.Body/></span>
-        )) }</>
+        ))}</>
     );
 
   }
@@ -41,7 +41,7 @@ class BaseComponent extends Component {
 
     return (
       <div className={content_class} id={content_id}>
-        <this.ContentBody />
+        {this.ContentBody()}
       </div>
     );
   }

@@ -148,7 +148,7 @@ const UiFun = () => {
   //BREAKPOINT_PAIRS.forEach(pair => evaluateBreakpoint(pair));
   window.setInterval(() => BREAKPOINT_PAIRS.forEach(pair => evaluateBreakpoint(pair)), 50);
   const contactform = () => document.getElementById('contactform');
-  let contactforminterval = setInterval(() => {
+  setInterval(() => {
     if (contactform()) {
       contactform().onload = e => sizeIframe(e.target);
     }
