@@ -166,6 +166,7 @@ class ImageComponent extends BaseComponent {
 class SkillComponent extends Component {
   requiredProperties = ['name', 'description'];
   fetchedComponents = false;
+  wordiness = 0;
 
   constructor(props) {
     super(props);
@@ -201,9 +202,10 @@ class SkillComponent extends Component {
         return (<></>);
     }
 
-    if (!this.fetchedComponents) {
+    if (!this.fetchedComponents || this.wordiness !== this.props.wordiness) {
       const callback = components => this.setState({components});
       this.fetchedComponents = true;
+      this.wordiness = this.props.wordiness;
       getComponents({textStr:skillObject.description}, null, () => 0, true)
         .then(async coms => coms.map(component => component.body))
         .then(callback);
@@ -234,7 +236,9 @@ class SkillContainer extends Component {
     let skills = this.props.skillList.filter(skill => skill.wordiness <= wordiness);
     return (
       <div className="skillcontainer">
-        { skills.map((skill, index) => (<SkillComponent key={index} skillObject={skill} />)) }
+        {skills.map((skill, index) => {
+          return (<SkillComponent wordiness={wordiness} key={index} skillObject={skill}/>);
+         })}
       </div>
     );
   }
@@ -243,6 +247,7 @@ class SkillContainer extends Component {
 class SampleComponent extends Component {
   requiredProperties = ['name', 'description', 'href'];
   fetchedComponents = false;
+  wordiness = 0;
 
   constructor(props) {
     super(props);
@@ -275,9 +280,10 @@ class SampleComponent extends Component {
         return (<></>);
     }
 
-    if (!this.fetchedComponents) {
+    if (!this.fetchedComponents || this.wordiness !== this.props.wordiness) {
       const callback = components => this.setState({components});
       this.fetchedComponents = true;
+      this.wordiness = this.props.wordiness;
       getComponents({textStr:sampleObject.description}, null, () => 0, true)
         .then(async coms => coms.map(component => component.body))
         .then(callback);
@@ -311,7 +317,9 @@ class SampleContainer extends Component {
     let samples = this.props.sampleList.filter(sample => sample.wordiness <= wordiness);
     return (
       <div className="samplecontainer">
-        { samples.map((sample, index) => (<SampleComponent key={index} sampleObject={sample} />)) }
+        {samples.map((sample, index) =>
+          (<SampleComponent key={index} sampleObject={sample} wordiness={wordiness} />)
+        )}
       </div>
     );
   }
