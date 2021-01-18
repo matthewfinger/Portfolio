@@ -1,4 +1,4 @@
-const default_base_url = 'http://localhost:8000';
+const default_base_url = 'http://backend.mattfinger.info';
 
 //returns JWT containing the post and all the info about it
 async function getPost(postName=null, id=null, url=default_base_url+"/post/") {
