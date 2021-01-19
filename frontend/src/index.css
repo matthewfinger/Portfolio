@@ -117,8 +117,11 @@ nav .mobileOnly {
 
 #navLogo img {
   display: inline-block;
-  min-width: 40px;
-  width: calc(2vw + 10px);
+  height: calc((1vw + 25px) / 1.31);
+  max-width: 65px;
+  /*min-width: 40px;*/
+  width: calc(1vw + 25px);
+  max-height: 50px;
 }
 
 #navToggle {
@@ -305,6 +308,7 @@ nav .mobileOnly {
 }
 
 .optionsRow button {
+  background: #f0f0f0ff;
   border: 0px;
   border-radius: 5px;
   font-size: 14px;

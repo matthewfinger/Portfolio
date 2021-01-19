@@ -101,16 +101,17 @@ function hideNav(element) {
       const toggler = document.querySelector(element.dataset.toggler);
       show(toggler);
 
-      const children = [].slice.call(element.children).filter(el => !!(el));
+      let children = [].slice.call(element.children).filter(el => !!(el));
+      children.push(document.getElementById('root'));
       const close = () => collapse(element);
-      children.forEach(child => child.onclick = close);
+      children.forEach(child => child.addEventListener('mouseup', close, false));
 
       if (!toggler.onclick) {
         const toggle = () => {
           if (element.style.display === 'none') show(element);
           else collapse(element);
         }
-        toggler.onclick = toggle;
+        toggler.addEventListener('click', toggle, false);
       }
     }
   }

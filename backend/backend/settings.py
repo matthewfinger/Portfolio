@@ -26,7 +26,7 @@ SECRET_KEY = '5v%0nspqq9_cdb(u2^t2*)#_77xugp2ned7y4#)d091gx5lp54'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['backend.mattfinger.info', 'mattfinger.info']
 
 
 # Application definition
@@ -137,6 +137,11 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = '587'
-EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+EMAIL_HOST_USER = 'matthewfinger3@gmail.com'
+if 'EMAIL_HOST_USER' in os.environ.keys():
+  EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = '083100Matt#'
+if 'EMAIL_HOST_PASSWORD' in os.environ.keys():
+  EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 EMAIL_USE_TLS = True
+
