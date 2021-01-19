@@ -453,7 +453,7 @@ nav .mobileOnly {
 
 .skillheader {
   display: flex;
-  flex-direction: row;
+  flex-direction: row-reverse;
   justify-content: space-between;
   height: 50px;
 }
