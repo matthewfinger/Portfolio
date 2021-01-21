@@ -76,6 +76,7 @@ def ContactForm(request):
             from_email=contact_obj.email,
             recipient_list=['matthewfinger3@gmail.com'],
             html_message=html_message,
+	    fail_silently=True
         )
 
 

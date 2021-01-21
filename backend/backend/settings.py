@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+from . import secrets
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '5v%0nspqq9_cdb(u2^t2*)#_77xugp2ned7y4#)d091gx5lp54'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['backend.mattfinger.info', 'mattfinger.info']
 
@@ -137,11 +138,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = '587'
-EMAIL_HOST_USER = ''
-if 'EMAIL_HOST_USER' in os.environ.keys():
-  EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
-EMAIL_HOST_PASSWORD = ''
-if 'EMAIL_HOST_PASSWORD' in os.environ.keys():
-  EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+EMAIL_HOST_USER = secrets.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = secrets.EMAIL_HOST_PASSWORD
 EMAIL_USE_TLS = True
 
