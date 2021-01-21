@@ -130,7 +130,7 @@ class ImageComponent extends BaseComponent {
     this.state.resourceFunction = 'getImage';
     delete this.state.post;
     this.state.imageurl = '';
-    this.state.resourceserver = props.resourceserver || 'http://backend.mattfinger.info';
+    this.state.resourceserver = props.resourceserver || 'https://backend.mattfinger.info';
   }
 
   async getResource() {
