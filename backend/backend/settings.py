@@ -27,7 +27,7 @@ SECRET_KEY = '5v%0nspqq9_cdb(u2^t2*)#_77xugp2ned7y4#)d091gx5lp54'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['backend.mattfinger.info', 'mattfinger.info']
+ALLOWED_HOSTS = ['backend.mattfinger.info', 'mattfinger.info', 'localhost']
 
 
 # Application definition
@@ -141,4 +141,3 @@ EMAIL_PORT = '587'
 EMAIL_HOST_USER = secrets.EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = secrets.EMAIL_HOST_PASSWORD
 EMAIL_USE_TLS = True
-

@@ -53,3 +53,8 @@ class FooterItem(models.Model):
     href = models.CharField(max_length=1000)
     order_key = models.IntegerField(default=0, blank=True)
     image = models.ForeignKey('Image', models.SET_NULL, blank=True, null=True)
+
+#to record each visitor of the website
+class Visit(models.Model):
+    date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    ip = models.CharField(max_length=39)

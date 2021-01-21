@@ -119,4 +119,23 @@ async function fetchList(url) {
   return out;
 }
 
-export { getPost, getImage, getSections, getSkills, fetchList, default_base_url }
+//function that sends the usage
+async function sendVisit() {
+  let url = default_base_url + '/post/new_visit/';
+  let res = await fetch(url, {
+    'Method': 'GET',
+  });
+  const out = await res.json();
+
+  return out;
+}
+
+export {
+  getPost,
+  getImage,
+  getSections,
+  getSkills,
+  fetchList,
+  sendVisit,
+  default_base_url
+}

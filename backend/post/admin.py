@@ -19,9 +19,13 @@ class SampleAdmin(admin.ModelAdmin):
 class FooterItemAdmin(admin.ModelAdmin):
     list_display = ('name','href','order_key','id',)
 
+class VisitAdmin(admin.ModelAdmin):
+    list_display = ('date','ip')
+
 admin.site.register(models.Post, PostAdmin)
 admin.site.register(models.Image, ImageAdmin)
 admin.site.register(models.Resource, ResourceAdmin)
 admin.site.register(models.Skill, SkillAdmin)
 admin.site.register(models.Sample, SampleAdmin)
 admin.site.register(models.FooterItem, FooterItemAdmin)
+admin.site.register(models.Visit, VisitAdmin)

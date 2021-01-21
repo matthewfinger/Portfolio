@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.forms.models import model_to_dict
 from .models import *
 from .serializers import *
 from rest_framework import viewsets
@@ -245,3 +246,31 @@ def footer_item_detail(request, pk=None, name=None, format=None):
         footer_item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     return Response(status=status.HTTP_400_BAD_REQUEST)
+
+def visit(request, new=False):
+    print('hello world')
+    res = HttpResponse()
+    try:
+        if not new:
+            visits = Visit.objects.all()
+            visit_dicts = []
+            for visit in visits:
+                visit_dicts.append(model_to_dict(visit))
+            return JsonResponse({'content': visit_dicts})
+        else:
+            ip=''
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+            if x_forwarded_for:
+                ip = x_forwarded_for.split(',')[0]
+            else:
+                ip = request.META.get('REMOTE_ADDR')
+            _visit = Visit(ip=ip)
+            _visit.save()
+            return JsonResponse(model_to_dict(_visit))
+    except err:
+        res.status_code = 400
+        res.reason_phrase = "Should only be sending get and post requests"
+        return res
+
+def new_visit(request):
+    return visit(request, True)

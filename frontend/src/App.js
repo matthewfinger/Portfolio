@@ -3,7 +3,7 @@ import Nav from './components/Nav'
 import { Content, MainContent } from './components/Content'
 import Footer from './components/Footer'
 import { Options } from './components/Options'
-import { getPost, getImage, getSections, getSkills } from './functions/HTTPClient'
+import { getPost, getImage, getSections, getSkills, sendVisit } from './functions/HTTPClient'
 import UiFun from './ui'
 
 const { Component } = React;
@@ -26,6 +26,7 @@ class App extends Component {
     getSkills()
       .then(this.addskills);
     UiFun();
+    sendVisit();
   }
 
   incrementWordiness = () => this.setState({wordinessLevel: this.state.wordinessLevel + 1});
