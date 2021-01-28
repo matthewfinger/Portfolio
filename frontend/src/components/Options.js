@@ -2,7 +2,10 @@ import { Component } from 'react';
 
 class BackgroundSlider extends Component {
   changebackground = event => {
-    document.body.style.background = `hsl(${event.target.value}, 100%, 8%)`;
+    let background = `hsl(${event.target.value}, 100%, 8%)`;
+    if (Number(event.target.value) <= 3)
+      background = `hsl(${event.target.value}, 0%, 8%)`;
+    document.body.style.background = background;
     this.setState({value:event.target.value});
   }
 
