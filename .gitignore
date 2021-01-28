@@ -2,3 +2,4 @@
 *.scratch*
 backend/backend/settings.py
 secrets.py
+db.sqlite3
