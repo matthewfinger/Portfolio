@@ -121,13 +121,20 @@ async function fetchList(url) {
 
 //function that sends the usage
 async function sendVisit() {
-  let url = default_base_url + '/post/new_visit/';
-  let res = await fetch(url, {
-    'Method': 'GET',
-  });
-  const out = await res.json();
+  try {
+    let url = default_base_url + '/post/new_visit/';
+    let res = await fetch(url, {
+      'Method': 'GET',
+    });
 
-  return out;
+    const out = await res.json();
+    return out;
+  }
+  catch( error ) {
+    console.warn(error);
+  }
+
+  return {};
 }
 
 export {
