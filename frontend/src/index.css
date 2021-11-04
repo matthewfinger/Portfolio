@@ -58,8 +58,10 @@ nav .mobileOnly {
 #aboutmecontent {
   border-radius: 10px;
   background: #b3ebff;
-  font-weight: 600;
-  padding: 10px;
+  font-weight: light;
+  line-height: 1.3em;
+  font-size: 1.3em;
+  padding: 1.2vw;
   color: #222;
 }
 
@@ -365,7 +367,7 @@ nav .mobileOnly {
 }
 
 .bigsection {
-  margin-bottom: 10vh;
+  margin-bottom: 12vh;
 }
 
 .mainSection {
@@ -381,7 +383,7 @@ nav .mobileOnly {
 .mainSection .post_content {
   margin-top: 6vh;
   font-size: max(calc(10px + 1vh), 20px);
-  line-height: max(calc(15px + 1.5vh), 25px);
+  line-height: max(calc(16px + 1.5vh), 28px);
 }
 
 .post_content {
@@ -475,7 +477,7 @@ nav .mobileOnly {
 }
 
 .pageSection {
-  padding-top: 10vh;
+ /* padding-top: 10vh;*/
 }
 
 .samplecontainer {
