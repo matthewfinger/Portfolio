@@ -17,6 +17,7 @@ class Post(models.Model):
     content = models.TextField(max_length=5000, blank=True, default='')
     content_class = models.CharField(max_length=100, default='post_content')
     content_id = models.CharField(max_length=100, default='', blank=True)
+    enabled = models.BooleanField(blank=True, default=True)
 
 class Image(models.Model):
     name = models.CharField(max_length=100, unique=True)

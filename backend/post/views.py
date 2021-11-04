@@ -62,6 +62,8 @@ def post_list(request, sections=False, format=None):
         posts = Post.objects.all()
         if sections:
             posts = posts.filter(is_section=True)
+        if request.GET.get('enabledonly'):
+            posts = posts.filter(enabled=True)
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':

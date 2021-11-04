@@ -7,7 +7,7 @@ async function getPost(postName=null, id=null, url=default_base_url+"/post/") {
   } else if (id) {
     url += id;
   }
-  url += "?format=json";
+  url += "?format=json&enabledonly=1";
   try {
     const response = await fetch(url, {
       method: "GET",
