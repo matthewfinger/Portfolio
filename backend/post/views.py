@@ -108,7 +108,7 @@ def post_detail(request, pk=None, name=None, format=None):
 @api_view(['GET','POST'])
 def skill_list(request, format=None):
     if request.method == 'GET':
-        skills = Skill.objects.all()
+        skills = Skill.objects.order_by('order_key')
         serializer = SkillSerializer(skills, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
