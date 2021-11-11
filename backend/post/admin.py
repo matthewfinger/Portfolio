@@ -11,7 +11,7 @@ class ResourceAdmin(admin.ModelAdmin):
     list_display = ('name','resource','id',)
 
 class SkillAdmin(admin.ModelAdmin):
-    list_display = ('name','order_key','wordiness','id',)
+    list_display = ('name','order_key','wordiness','id','enabled',)
 
 class SampleAdmin(admin.ModelAdmin):
     list_display = ('name','href','order_key','wordiness','id',)
