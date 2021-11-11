@@ -39,6 +39,7 @@ class Skill(models.Model):
     order_key = models.IntegerField(default=0, blank=True)
     description = models.TextField(max_length=1000, blank=True, default='')
     image = models.ForeignKey('Image', models.SET_NULL, blank=True, null=True)
+    enabled = models.BooleanField(blank=True, default=True)
 
 
 class Sample(models.Model):
