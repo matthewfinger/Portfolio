@@ -65,7 +65,7 @@ class MainContent extends Content {
         </div>
         <ImageComponent functions={this.state.functions} containerId="section1LogoContainer" id='section1Logo' imageName="Logo1" />
       </section>
-      <br style={{height: '5vh'}}/>
+      <br style={{height: '5vh', width: '100%', display: 'block'}}/>
       <br/>
       </>
     );
