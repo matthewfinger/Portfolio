@@ -164,8 +164,7 @@ async function getComponents(post, parentComponent=null, getWordiness=()=>0, ret
   let components = [];
   const BaseBody = seg => () => (<>{seg}</>);
   try {
-    textStr = stripComments(textStr);
-    let segments = getSegments(textStr);
+    let segments = getSegments(stripComments(textStr));
     let segment = [];
     for (let i = 0; i < segments.length; i++) {
       segment = segments[i]
