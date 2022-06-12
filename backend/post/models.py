@@ -17,6 +17,7 @@ class Post(models.Model):
     content = models.TextField(max_length=5000, blank=True, default='')
     content_class = models.CharField(max_length=100, default='post_content')
     content_id = models.CharField(max_length=100, default='', blank=True)
+    enabled = models.BooleanField(blank=True, default=True)
 
 class Image(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -38,6 +39,7 @@ class Skill(models.Model):
     order_key = models.IntegerField(default=0, blank=True)
     description = models.TextField(max_length=1000, blank=True, default='')
     image = models.ForeignKey('Image', models.SET_NULL, blank=True, null=True)
+    enabled = models.BooleanField(blank=True, default=True)
 
 
 class Sample(models.Model):

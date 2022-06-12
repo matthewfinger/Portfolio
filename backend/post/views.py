@@ -62,6 +62,8 @@ def post_list(request, sections=False, format=None):
         posts = Post.objects.all()
         if sections:
             posts = posts.filter(is_section=True)
+        if request.GET.get('enabledonly'):
+            posts = posts.filter(enabled=True)
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
@@ -108,7 +110,7 @@ def post_detail(request, pk=None, name=None, format=None):
 @api_view(['GET','POST'])
 def skill_list(request, format=None):
     if request.method == 'GET':
-        skills = Skill.objects.all()
+        skills = Skill.objects.order_by('order_key').filter( enabled=True )
         serializer = SkillSerializer(skills, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':

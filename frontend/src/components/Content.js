@@ -54,6 +54,7 @@ class Content extends BaseComponent {
 class MainContent extends Content {
   render() {
     return (
+      <>
       <section className={this.state.post.container_class}>
         <div>
           <this.Title />
@@ -64,6 +65,8 @@ class MainContent extends Content {
         </div>
         <ImageComponent functions={this.state.functions} containerId="section1LogoContainer" id='section1Logo' imageName="Logo1" />
       </section>
+      <span style={{height: '5vh', width: '100%', display: 'block'}}></span>
+      </>
     );
   }
 }

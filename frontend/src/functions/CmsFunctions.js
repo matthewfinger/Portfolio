@@ -152,6 +152,11 @@ function getSegments(textStr, staticVals=true, dynamicVals=true) {
   return segments;
 }
 
+//Allows comments to be made using [%-- commented out stuff --%]
+function stripComments( textStr ) {
+  return textStr.replaceAll( /\[%\-\-(.*)\-\-%\]/gs, '' );
+}
+
 //takes the main text as an input, and returns a list of objects (to be rendered)
 //each object in the list will have at least a 'body', and a 'wordiness' property
 async function getComponents(post, parentComponent=null, getWordiness=()=>0, returnvals=false) {
@@ -159,7 +164,7 @@ async function getComponents(post, parentComponent=null, getWordiness=()=>0, ret
   let components = [];
   const BaseBody = seg => () => (<>{seg}</>);
   try {
-    let segments = getSegments(textStr);
+    let segments = getSegments(stripComments(textStr));
     let segment = [];
     for (let i = 0; i < segments.length; i++) {
       segment = segments[i]
