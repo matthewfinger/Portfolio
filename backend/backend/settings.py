@@ -25,7 +25,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '5v%0nspqq9_cdb(u2^t2*)#_77xugp2ned7y4#)d091gx5lp54'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+try:
+    DEBUG = secrets.DEBUG
+except:
+    DEBUG = False
 
 ALLOWED_HOSTS = ['backend.mattfinger.info', 'mattfinger.info', 'localhost']
 
