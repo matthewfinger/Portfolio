@@ -156,8 +156,10 @@ class ImageComponent extends BaseComponent {
     return (
       <div id={this.props.containerId || ""}>
         <this.Img />
-        <h3>Matt Finger</h3>
-        <h2>Web Consultant</h2>
+        <h2>Matt Finger</h2>
+        <h4>Web Consultant, Designer, and Developer</h4>
+	<hr/>
+	<h5>(based in Milwaukee!)</h5>
       </div>
     );
   }

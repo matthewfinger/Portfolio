@@ -38,6 +38,7 @@ h1 {
 
 hr {
   border: none;
+  border-radius: 2px;
   color: #f0f0f0;
   background: #f0f0f0;
   height: 4px;
@@ -341,7 +342,7 @@ nav .mobileOnly {
 #section1Logo {
   margin: 0;
   height: min(calc(40vw * 0.763), 70vh);
-  max-width: 50vw;
+  max-width: 40vw;
 }
 
 #section1LogoContainer {
@@ -352,18 +353,43 @@ nav .mobileOnly {
   margin-right: 0px;
 }
 
-#section1LogoContainer h2, #section1LogoContainer h3 {
+#section1LogoContainer * {
+  text-align: center;
+}
+
+#section1LogoContainer h2,
+#section1LogoContainer h3,
+#section1LogoContainer h4,
+#section1LogoContainer h5 {
   margin: 0;
 }
 
 #section1LogoContainer h2 {
   color: #00c2ff;
-  font-size: max(3.5vw, 40px);
+  font-size: max(3vw, 30px);
+  margin-top: 2vh;
+  margin-bottom: 2vh;
 }
 
-#section1LogoContainer h3 {
-  color: #f7ff08;
-  font-size: max(3vw, 30px);
+#section1LogoContainer h4 {
+  color: #fbff85;
+  font-size: max(2vw, 20px);
+}
+
+#section1LogoContainer h5 {
+  color: #ffc37a;
+  font-size: max(1.6vw, 18px);
+}
+
+#section1LogoContainer hr {
+  background: #fbff85;
+  color: #fbff85;
+  height: 2px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  margin-left: 4vw;
+  max-width: 37vw;
+  width: calc(100% - 8vw);
 }
 
 .bigsection {
@@ -375,13 +401,25 @@ nav .mobileOnly {
   flex-direction: row;
 }
 
+.mainSection > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.mainSection > div hr {
+  background: #fff;
+  display: block;
+  margin: 15px 0 15px 0;
+}
+
 .mainSection .post_title {
   font-size: max(32px, calc(18px + 3vh)) !important;
   margin-bottom: 2vh !important;
 }
 
 .mainSection .post_content {
-  margin-top: 6vh;
+  margin-top: 2vh;
   font-size: max(calc(10px + 1vh), 20px);
   line-height: max(calc(16px + 1.5vh), 28px);
 }
