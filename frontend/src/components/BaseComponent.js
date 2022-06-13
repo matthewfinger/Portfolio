@@ -15,7 +15,7 @@ class TextToggle extends Component {
       wordLength: 1,
       expanding: true,
       fullCount: false,
-      charDelay: props.charDelay || 40,
+      charDelay: props.charDelay || 23,
       currentStr: words[0].substr(0,1)
     }
   }
@@ -29,7 +29,7 @@ class TextToggle extends Component {
       /* Keep it full length for a while */
       if ( fullCount === false )
       {
-        fullCount = Math.round(3.8 * currentStr.length);
+        fullCount = Math.round(70 + (1.2 * currentStr.length));
       }
       else if ( fullCount === 0 )
       {

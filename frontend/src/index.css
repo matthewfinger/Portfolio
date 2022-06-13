@@ -101,7 +101,7 @@ nav .mobileOnly {
 #pageContent {
   margin: auto;
   margin-bottom: 150px;
-  margin-top: calc(10vh + 10px);
+  margin-top: calc(8vh + 10px);
   width: 80vw;
   min-width: 340px;
 }
