@@ -68,7 +68,7 @@ async function getSections(url=default_base_url+'/post/sections/?enabledonly=1')
   }
 }
 
-async function getSkills(url=default_base_url+'/post/skills') {
+async function getSkills(url=default_base_url+'/post/skills/') {
   let out = [];
   url += '?format=json';
   try {
