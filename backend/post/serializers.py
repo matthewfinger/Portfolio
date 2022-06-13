@@ -20,7 +20,7 @@ class ImageSerializer(serializers.ModelSerializer):
 class SkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skill
-        fields = ['id', 'name', 'wordiness', 'order_key', 'description', 'image']
+        fields = ['id', 'name', 'wordiness', 'order_key', 'description', 'image','price']
 
 class SampleSerializer(serializers.ModelSerializer):
     class Meta:

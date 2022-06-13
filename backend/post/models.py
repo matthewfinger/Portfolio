@@ -40,6 +40,7 @@ class Skill(models.Model):
     description = models.TextField(max_length=1000, blank=True, default='')
     image = models.ForeignKey('Image', models.SET_NULL, blank=True, null=True)
     enabled = models.BooleanField(blank=True, default=True)
+    price = models.DecimalField(blank=True, null=True, default=None, max_digits=10, decimal_places=2)
 
 
 class Sample(models.Model):
