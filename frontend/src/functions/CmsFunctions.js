@@ -154,7 +154,7 @@ function getSegments(textStr, staticVals=true, dynamicVals=true) {
 
 //Allows comments to be made using [%-- commented out stuff --%]
 function stripComments( textStr ) {
-  return textStr.replaceAll( /\[%\-\-(.*)\-\-%\]/gs, '' );
+  return textStr.replaceAll( /\[%--(.*)--%\]/gs, '' );
 }
 
 //takes the main text as an input, and returns a list of objects (to be rendered)

@@ -275,7 +275,6 @@ class SkillComponent extends Component {
 
   render() {
     const skillObject = this.props.skillObject || {};
-    console.log(skillObject);
 
     for (let requiredProperty of this.requiredProperties) {
       if (!Object.keys(skillObject).includes(requiredProperty))
@@ -283,10 +282,10 @@ class SkillComponent extends Component {
     }
 
     if (!this.fetchedComponents || this.wordiness !== this.props.wordiness) {
-      const callback = (components => {
+      const callback = components => {
         this.fetchedComponents = true;
         this.setState({components});
-      }).bind(this);
+      };
 
       this.wordiness = this.props.wordiness;
       getComponents({textStr:skillObject.description}, null, () => 0, true)
