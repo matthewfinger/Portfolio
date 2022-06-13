@@ -236,7 +236,7 @@ class ImageComponent extends BaseComponent {
       <div id={this.props.containerId || ""}>
         <this.Img />
         <h2>Matt Finger</h2>
-        <h4><TextToggle prefix={"Web "} words={["Consultant", "Developer", "Designer", "whatever you need as long as you pay me!"]} /></h4>
+        <h4><TextToggle prefix={"Web "} words={["Consultant", "Developer", "Designer"]} /></h4>
         <h5>(based in Milwaukee!)</h5>
       </div>
     );
