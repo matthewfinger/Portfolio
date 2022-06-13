@@ -3,6 +3,85 @@ import { getPost, getImage, getSections, default_base_url } from '../functions/H
 import { getComponents } from '../functions/CmsFunctions';
 const { Component } = React;
 
+class TextToggle extends Component {
+  constructor(props) {
+    super(props);
+    let words = props.words || [];
+    this.state = {
+      prefix : props.prefix || "",
+      words,
+      suffix: props.suffix || "",
+      wordIndex: 0,
+      wordLength: 1,
+      expanding: true,
+      fullCount: false,
+      charDelay: props.charDelay || 40,
+      currentStr: words[0].substr(0,1)
+    }
+  }
+
+  getText() {
+    let {expanding, wordIndex, wordLength, fullCount} = this.state;
+    let currentStr = this.state.words[wordIndex].substr(0, wordLength);
+
+    if ( wordLength >= this.state.words[wordIndex].length ){
+      expanding = false;
+      /* Keep it full length for a while */
+      if ( fullCount === false )
+      {
+        fullCount = 3 * currentStr.length;
+      }
+      else if ( fullCount === 0 )
+      {
+        fullCount = false;
+      }
+      else
+      {
+        fullCount--;
+      }
+    }
+
+    if ( fullCount === false ) {
+      if ( expanding ) wordLength++;
+      else wordLength--;
+    }
+
+    if (wordLength < 0 && !expanding) {
+      expanding = true;
+      wordLength = 0;
+      wordIndex++;
+      if ( wordIndex >= this.state.words.length ) {
+        wordIndex = 0;
+      }
+    }
+
+    this.setState({
+      ...this.state,
+      expanding,
+      wordIndex,
+      wordLength,
+      currentStr,
+      fullCount
+    })
+  }
+
+  componentDidMount() {
+    this.interval = window.setInterval( this.getText.bind(this), this.state.charDelay );
+  }
+
+  componentWillUnmount() {
+    super.componentWillUnmount();
+    clearInterval(this.interval);
+  }
+
+  render() {
+    // eslint-disable-next-line
+    return (
+      <span>{this.state.prefix + this.state.currentStr + this.state.suffix}</span>
+    );
+  }
+}
+
 class BaseComponent extends Component {
 
   Title = () => {
@@ -157,9 +236,8 @@ class ImageComponent extends BaseComponent {
       <div id={this.props.containerId || ""}>
         <this.Img />
         <h2>Matt Finger</h2>
-        <h4>Web Consultant, Designer, and Developer</h4>
-	<hr/>
-	<h5>(based in Milwaukee!)</h5>
+        <h4><TextToggle prefix={"Web "} words={["Consultant", "Developer", "Designer", "Whatever you need as long as you pay me"]} /></h4>
+        <h5>(based in Milwaukee!)</h5>
       </div>
     );
   }
@@ -326,6 +404,8 @@ class SampleContainer extends Component {
     );
   }
 }
+
+
 
 export {
   BaseComponent,
