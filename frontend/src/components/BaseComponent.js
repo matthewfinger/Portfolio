@@ -70,7 +70,6 @@ class TextToggle extends Component {
   }
 
   componentWillUnmount() {
-    super.componentWillUnmount();
     clearInterval(this.interval);
   }
 
@@ -271,20 +270,24 @@ class SkillComponent extends Component {
   }
 
   async componentDidMount() {
-
+    // @todo line up our heights
   }
 
   render() {
     const skillObject = this.props.skillObject || {};
+    console.log(skillObject);
 
-    for (let i = 0; i < this.requiredProperties.length; i++) {
-      if (!Object.keys(skillObject).includes(this.requiredProperties[i]))
+    for (let requiredProperty of this.requiredProperties) {
+      if (!Object.keys(skillObject).includes(requiredProperty))
         return (<></>);
     }
 
     if (!this.fetchedComponents || this.wordiness !== this.props.wordiness) {
-      const callback = components => this.setState({components});
-      this.fetchedComponents = true;
+      const callback = (components => {
+        this.fetchedComponents = true;
+        this.setState({components});
+      }).bind(this);
+
       this.wordiness = this.props.wordiness;
       getComponents({textStr:skillObject.description}, null, () => 0, true)
         .then(async coms => coms.map(component => component.body))
@@ -301,6 +304,7 @@ class SkillComponent extends Component {
           <hr/>
           <section className="skilldescription">
             { this.state.components.map((C, index) => (<span key={index}><C /></span>)) }
+            <div className="priceTag">{skillObject.price ? `Standard Cost - $${skillObject.price} ${skillObject.price_unit || 'per hour'}` : 'Contact for more info!'}</div>
           </section>
         </article>
       </div>

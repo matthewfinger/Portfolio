@@ -101,7 +101,7 @@ nav .mobileOnly {
 #pageContent {
   margin: auto;
   margin-bottom: 150px;
-  margin-top: calc(10vh + 30px);
+  margin-top: calc(10vh + 10px);
   width: 80vw;
   min-width: 340px;
 }
@@ -511,6 +511,12 @@ nav .mobileOnly {
 
 .outerskillbox * {
   font-family: arial;
+}
+
+.innerskillbox .priceTag {
+  font-weight: bold;
+  width: 100%;
+  text-align: right;
 }
 
 .pageSection {

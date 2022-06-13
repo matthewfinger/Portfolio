@@ -41,6 +41,7 @@ class Skill(models.Model):
     image = models.ForeignKey('Image', models.SET_NULL, blank=True, null=True)
     enabled = models.BooleanField(blank=True, default=True)
     price = models.DecimalField(blank=True, null=True, default=None, max_digits=10, decimal_places=2)
+    price_unit = models.CharField(max_length=100, blank=True, default="per hour")
 
 
 class Sample(models.Model):
