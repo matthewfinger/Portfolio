@@ -9,7 +9,7 @@ cd $basedir/frontend
 npm run build
 
 cd $basedir
-pipenv run python $basedir/backend/manage.py makemigrations
-pipenv run python $basedir/backend/manage.py migrate
+su - matthewfinger -c "cd $basedir;pipenv run python $basedir/backend/manage.py makemigrations"
+su - matthewfinger  -c "cd $basedir;pipenv run python $basedir/backend/manage.py migrate"
 
 apache2ctl restart
