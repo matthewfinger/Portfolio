@@ -29,7 +29,7 @@ class TextToggle extends Component {
       /* Keep it full length for a while */
       if ( fullCount === false )
       {
-        fullCount = 3 * currentStr.length;
+        fullCount = Math.round(3.8 * currentStr.length);
       }
       else if ( fullCount === 0 )
       {
