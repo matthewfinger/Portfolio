@@ -17,12 +17,11 @@ class BackgroundSlider extends Component {
 
   constructor(props) {
     super(props);
-    let value = Number(window.localStorage.getItem('backgroundPreference') || 0);
-    if (value <= 3) value = 188;
+    let value = Number(window.localStorage.getItem('backgroundPreference') || 188);
     this.state = {
       value
     };
-    if ( value && value !== 188 ) setTimeout(() => {document.body.style.background = `hsl(${value}, 100%, 8%)`}, 0);
+    if ( value && value !== 188 ) setTimeout(() => {document.body.style.background = `hsl(${value}, ${value <=3 ? '8%' : '100%'}, 8%)`}, 0);
   }
 
   render() {
@@ -41,11 +40,16 @@ class Options extends Component {
 
   GetBackgroundSlider = () => {
     if (this.props.getWordiness() >= 2) {
-      return (<BackgroundSlider />);
+      return (<BackgroundSlider/>);
     }
 
     return (<></>);
   }
+
+  componentDidMount() {
+    new BackgroundSlider();
+  }
+
   render() {
     const missingProp = propName => () => console.log(`prop '${propName}' missing! should be a function for 'Options' component`);
     const incrementWordiness = this.props.incrementWordiness || missingProp('incrementWordiness');
