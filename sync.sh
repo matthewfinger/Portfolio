@@ -13,3 +13,9 @@ su - matthewfinger -c "cd $basedir;pipenv run python $basedir/backend/manage.py 
 su - matthewfinger  -c "cd $basedir;pipenv run python $basedir/backend/manage.py migrate"
 
 apache2ctl restart
+
+#lastly push since we might have migrations chagnes
+cd $basedir
+git add .
+git commit -m"Built on cloud"
+git push origin main
