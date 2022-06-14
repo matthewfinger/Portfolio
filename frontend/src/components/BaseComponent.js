@@ -49,19 +49,20 @@ class TextToggle extends Component {
       this.state.words[wordIndex] : 
        this.props.randomAnimation ? this.getRandomString( Math.round(this.state.words[wordIndex].length * .7 - 1) ) : this.state.words[wordIndex].substr(0, wordLength);
 
+
+    if (expanding && (this.state.words[wordIndex].length - wordLength === 4) && this.ref && this.ref.current) {
+      let shrinkTime = this.props.shrinkTime || 100;
+      if (!this.ref.current.style.transitionDuration) this.ref.current.style.transitionDuration = `${shrinkTime}ms`;
+      this.ref.current.style.transform = `scale(1.1)`;
+      const elem = this.ref.current;
+      window.setTimeout(()=> elem.style.transform = 'scale(1)', shrinkTime + 5);
+    }
     if ( wordLength >= this.state.words[wordIndex].length ) {
       expanding = false;
       /* Keep it full length for a while */
       if ( fullCount === false )
       {
         fullCount = Math.round((this.props.staticBase || 85) + ((this.props.staticLengthWeight || 1.2) * currentStr.length) * (wordIndex ? 1 : 2.2));
-        if (this.ref && this.ref.current) {
-          let shrinkTime = this.props.shrinkTime || 120;
-          if (!this.ref.current.style.transitionDuration) this.ref.current.style.transitionDuration = `${shrinkTime}ms`;
-          this.ref.current.style.transform = `scale(1.1)`;
-          const elem = this.ref.current;
-          window.setTimeout(()=> elem.style.transform = 'scale(1)', shrinkTime);
-        }
       }
       else if ( fullCount === 0 )
       {
