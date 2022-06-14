@@ -1,6 +1,15 @@
 from django.db import models
 from uuid import uuid4
 
+def NoStripCharField(**kwargs):
+    field = models.CharField(**kwargs)
+    def formfield(self, **kwargs):
+        kwargs['strip'] = False
+        return super(type(self), self).formfield(**kwargs)
+
+    field.formfield = formfield
+    return field
+
 class Post(models.Model):
     name = models.CharField(max_length=100, unique=True)
     is_section = models.BooleanField(blank=True, default=False)
@@ -41,7 +50,7 @@ class Skill(models.Model):
     image = models.ForeignKey('Image', models.SET_NULL, blank=True, null=True)
     enabled = models.BooleanField(blank=True, default=True)
     price = models.DecimalField(blank=True, null=True, default=None, max_digits=10, decimal_places=2)
-    price_unit = models.CharField(max_length=100, blank=True, default="per hour")
+    price_unit = NoStripCharField(max_length=100, blank=True, default="per hour")
 
 
 class Sample(models.Model):

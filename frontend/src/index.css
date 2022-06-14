@@ -1,6 +1,5 @@
 * {
   transition: all 0.125s cubic-bezier(0.2, -0.5, 0.7, 2.8) 0s;
-  color: #f0f0f0;
 }
 
 a, a:visited {
@@ -114,6 +113,7 @@ nav .mobileOnly {
 }
 
 #pageContent {
+  color: #f0f0f0;
   margin: auto;
   margin-bottom: 150px;
   margin-top: calc(8vh + 10px);
@@ -482,13 +482,20 @@ nav .mobileOnly {
 }
 
 .innerskillbox {
+  justify-content: space-between;
   box-sizing: border-box;
   box-shadow: 0px 0px 8px black;
   border-radius: 10px;
   background: #229de7; /* the default (every three starting on the THIRD) */
+  display: flex;
+  flex-direction: column;
   height: 100%;
   padding: 1em;
   transition-duration: 0.125s;
+}
+
+.innerskillbox hr {
+  width: 100%;
 }
 
 .innerskillbox:hover {
@@ -499,10 +506,22 @@ nav .mobileOnly {
   font-size: 0.7rem;
 }
 
+.innerskillbox section.skilldescription {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+  .innerskillbox section.skilldescription .spacer {
+    flex-grow: 1;
+    min-height: 15px;
+  }
+
 /* every three starting with the FIRST*/
 .outerskillbox:nth-child(3n+1) .innerskillbox {
   background: #d22d2d; /*red*/
-  color: #ffd4e5; /* blush-pink */
+  /*color: #ffd4e5; /* blush-pink */
 }
 
 .outerskillbox:nth-child(3n+1) hr {

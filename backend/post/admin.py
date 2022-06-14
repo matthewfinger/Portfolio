@@ -13,6 +13,14 @@ class ResourceAdmin(admin.ModelAdmin):
 class SkillAdmin(admin.ModelAdmin):
     list_display = ('name','order_key','wordiness','id','enabled',)
 
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        '''This will make sure that the suffix won't strip'''
+
+        if db_field.name == 'price_unit':
+            kwargs['strip'] = False
+            
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
+
 class SampleAdmin(admin.ModelAdmin):
     list_display = ('name','href','order_key','wordiness','id',)
 

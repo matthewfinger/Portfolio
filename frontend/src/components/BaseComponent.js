@@ -344,7 +344,10 @@ class SkillComponent extends Component {
           </header>
           <hr/>
           <section className="skilldescription">
-            { this.state.components.map((C, index) => (<span key={index}><C /></span>)) }
+            <div>
+              { this.state.components.map((C, index) => (<span key={index}><C /></span>)) }
+            </div>
+            <div className="spacer"></div>
             <div className="priceTag">{skillObject.price ? `Standard Cost - $${skillObject.price} ${skillObject.price_unit || 'per hour'}` : 'Contact for more info!'}{skillObject.price ? <sup> &dagger;</sup> : ""}</div>
           </section>
         </article>
