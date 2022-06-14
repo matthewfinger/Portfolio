@@ -35,7 +35,7 @@ function evaluateBreakpoint(breakpointPair) {
   {
     return;
   }
-  
+
   let elements = breakpointPair[0]();
   elements.forEach(element => {
     callback(element);
@@ -175,7 +175,7 @@ const UiFun = () => {
   registerBreakpoint('#section1LogoContainer > .mobileOn', {
     '800': (e => {
       showElement(e);
-      e.style.fontSize = e.tagName.toLowerCase() === 'h4' ? "4em" : "1.7em";
+      e.style.fontSize = e.tagName.toLowerCase() === 'h4' ? "2.5em" : "1.4em";
     }),
     '1023': (e => {
       hideElement(e);
