@@ -275,10 +275,10 @@ class ImageComponent extends BaseComponent {
       <div id={this.props.containerId || ""}>
         <this.Img />
         <h2>Matt Finger</h2>
-        <h4><TextToggle style={{
+        <h4 className="mobileOn"><TextToggle style={{
           color: "#fae543"
         }} prefix={"Web "} words={["Consultant", "Developer", "Designer"]} randomAnimation={this.state.wordiness >= 2 ? 1 : 0} /></h4>
-        <h5>(based in Milwaukee!)</h5>
+        <h5 className="mobileOn">(based in Milwaukee!)</h5>
       </div>
     );
   }

@@ -1,23 +1,25 @@
-let BREAKPOINT_PAIRS = [];
+let BREAKPOINT_PAIRS = {};
 
 
 function registerBreakpoint(querySelector, breakpointTable) {
-  let elements = () => Array(document.querySelector(`${querySelector}`));
+  let elements = () => [...document.querySelectorAll(`${querySelector}`)];
+  let key = JSON.stringify([querySelector, Object.keys(breakpointTable)]);
 
   if (!breakpointTable.lastKey)
     breakpointTable.lastKey = null;
 
-  BREAKPOINT_PAIRS.push([elements, breakpointTable]);
+  BREAKPOINT_PAIRS[key] = [elements, breakpointTable];
 }
 
 //finds the current entry out of the ones specified
 function getCurrentBreakpointKey(breakpointTable) {
-  const width = window.innerWidth;
-  let keys = Object.keys(breakpointTable).sort().filter(key => !isNaN(key)).map(key => Number(key));
+  let width = window.innerWidth;
+  let keys = Object.keys(breakpointTable).map(n => Number(n)).sort((a, b) => a < b).filter(e => !isNaN(e));
   let min = 0;
-  for (let i = 0; i < keys.length; i++) {
-    if (width >= min && width <= keys[i]) return keys[i];
-    min = keys[i];
+  for (let key of keys) {
+    if ( isNaN(key) ) continue;
+    if (width >= min && width <= key) return key;
+    min = key;
   }
   return keys.pop();
 }
@@ -28,8 +30,13 @@ function evaluateBreakpoint(breakpointPair) {
   let currentKey = getCurrentBreakpointKey(breakpointTable);
   if (breakpointTable.lastKey === currentKey) return;
 
-  let elements = breakpointPair[0]();
   let callback = breakpointTable[currentKey];
+  if ( !callback )
+  {
+    return;
+  }
+  
+  let elements = breakpointPair[0]();
   elements.forEach(element => {
     callback(element);
   });
@@ -90,6 +97,10 @@ function show(element) {
 }
 
 function hideNav(element) {
+  document.body.setAttribute( 'data-in-mobile', '1' );
+  let mainSection = document.getElementsByClassName('mainSection')[0]
+  if (mainSection) mainSection.style.flexWrap = "wrap";
+  document.querySelector("#section1LogoContainer").style.width = "100%";
   if (element) {
     collapse(element);
     element.style.flexDirection = 'column';
@@ -97,27 +108,43 @@ function hideNav(element) {
     element.style.width = '75vw';
     element.parentElement.style.zIndex = '500';
 
+    let visible = false;
     if (element.dataset.toggler) {
       const toggler = document.querySelector(element.dataset.toggler);
       show(toggler);
 
       let children = [].slice.call(element.children).filter(el => !!(el));
       children.push(document.getElementById('root'));
-      const close = () => collapse(element);
-      children.forEach(child => child.addEventListener('mouseup', close, false));
+      const close = e => {
+        visible = false;
+        collapse(element);
+      };
+      children.forEach(child => {child.onclick = child.onclick || close});
 
       if (!toggler.onclick) {
-        const toggle = () => {
-          if (element.style.display === 'none') show(element);
-          else collapse(element);
+        const toggle = e => {
+          e.stopPropagation();
+          if (!visible)
+          {
+            visible = true;
+            show(element);
+          }
+          else {
+            visible = false;
+            collapse(element);
+          }
         }
-        toggler.addEventListener('click', toggle, false);
+        toggler.onclick = toggle;
       }
     }
   }
 }
 
 function revertNav(element) {
+  document.body.setAttribute( 'data-in-mobile', '0' );
+  let mainSection = document.getElementsByClassName('mainSection')[0]
+  if (mainSection) mainSection.style.flexWrap = "";
+  document.querySelector("#section1LogoContainer").style.width = "";
   if (element) {
     element.style.flexDirection = '';
     element.style.top = '';
@@ -136,18 +163,36 @@ function revertNav(element) {
   }
 }
 
-
+let windowInterval;
 const UiFun = () => {
 
   //register the logo hide breakpoint
-  registerBreakpoint('#section1LogoContainer', { '1023': hideElement, '1024': showElement});
+  registerBreakpoint('#section1LogoContainer #section1Logo', { '1023': hideElement, '1024': showElement});
+  registerBreakpoint('#section1LogoContainer > :not(.mobileOn)', { '1023': hideElement, '1024': showElement});
   registerBreakpoint('#pageOptions', {'800': expandOptions, '801': revertOptions});
   registerBreakpoint('.navUl', {'800':hideNav, '801':revertNav});
-  registerBreakpoint('.mobileOnly', {'800':show, '801':collapse});
+  registerBreakpoint('.mobileOnly', {'800':show, '801': collapse});
+  registerBreakpoint('#section1LogoContainer > .mobileOn', {
+    '800': (e => {
+      showElement(e);
+      e.style.fontSize = e.tagName.toLowerCase() === 'h4' ? "4em" : "1.7em";
+    }),
+    '1023': (e => {
+      hideElement(e);
+      e.style.fontSize = "";
+    }),
+    '1024': (e => {
+      showElement(e);
+      e.style.fontSize = '';
+    })
+  });
+
+  window.BREAKPOINT_PAIRS = BREAKPOINT_PAIRS;
 
   //registerBreakpoint('#contactform', {'500': sizeIframe, '501': sizeIframe});
   //BREAKPOINT_PAIRS.forEach(pair => evaluateBreakpoint(pair));
-  window.setInterval(() => BREAKPOINT_PAIRS.forEach(pair => evaluateBreakpoint(pair)), 50);
+  if (windowInterval) window.clearInterval(windowInterval);
+  windowInterval = window.setInterval(() => Object.values(BREAKPOINT_PAIRS).forEach(pair => evaluateBreakpoint(pair)), 50);
   const contactform = () => document.getElementById('contactform');
   setInterval(() => {
     if (contactform()) {

@@ -163,6 +163,10 @@ nav .mobileOnly {
   z-index: 1000;
 }
 
+#navToggle * {
+  color: #333;
+}
+
 #navToggle:hover {
   background: #ff0;
   transform: scale(1.2);
@@ -332,6 +336,10 @@ nav .mobileOnly {
   flex-grow: 1;
   height: 30px;
   margin: auto 1em;
+}
+
+.optionsRow * {
+  color: #000;
 }
 
 .optionsRow button:hover:enabled {

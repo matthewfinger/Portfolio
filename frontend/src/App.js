@@ -22,12 +22,19 @@ class App extends Component {
 
   wordinessCallbacks = {}
 
-  componentDidMount() {
+  async componentDidMount() {
     this.addskills = skills => this.setState({skills});
-    getSkills()
-      .then(this.addskills);
-    UiFun();
+    await getSkills()
     sendVisit();
+
+    this.addskills();
+
+    UiFun();
+    let x = 10;
+    const interval = window.setInterval(() => {
+      UiFun();
+      if (x-- === 0) window.clearInterval(interval)
+    }, 100);
   }
 
   incrementWordiness = () => {
