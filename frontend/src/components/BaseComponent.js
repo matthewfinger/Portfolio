@@ -1,35 +1,67 @@
 import React from 'react';
 import { getPost, getImage, getSections, default_base_url } from '../functions/HTTPClient';
 import { getComponents } from '../functions/CmsFunctions';
-const { Component } = React;
+const { Component, createRef } = React;
 
 class TextToggle extends Component {
+  randomMap = {}
+  randomIndices = {}
+
   constructor(props) {
     super(props);
     let words = props.words || [];
+    let currentStr = words[0];
+    this.randomMap = {};
+    this.ref = createRef();
     this.state = {
       prefix : props.prefix || "",
       words,
       suffix: props.suffix || "",
       wordIndex: 0,
-      wordLength: 1,
+      wordLength: currentStr.length,
       expanding: true,
-      fullCount: false,
-      charDelay: props.charDelay || 23,
-      currentStr: words[0].substr(0,1)
+      fullCount: Math.round(65 + (1.2 * currentStr.length) * 0.5),
+      randomIterations: props.randomIterations || 10, // number of iterations per str length
+      currentStr
     }
   }
 
-  getText() {
-    let {expanding, wordIndex, wordLength, fullCount} = this.state;
-    let currentStr = this.state.words[wordIndex].substr(0, wordLength);
+  getRandomString(length) {
+    let out = '';
+    if ( !this.randomMap[length] || this.randomMap[length].length < this.state.randomIterations ) {
+      for ( let i = 0; i <= length; i++ ){
+        let x = Math.floor( Math.random() * 26 ) + 97;
+        out += String.fromCharCode(x);
+      }
+      this.randomMap[length] = this.randomMap[length] || [];
+      this.randomIndices[length] = this.randomIndices[length] || 0;
+      this.randomMap[length].push(out);
+    } else {
+      out = this.randomMap[length][this.randomIndices[length]++];
+      if( this.randomIndices[length] >= this.randomMap[length].length ) this.randomIndices[length] = 0;
+    }
+    return out;
+  }
 
-    if ( wordLength >= this.state.words[wordIndex].length ){
+  getText = () => {
+    let {expanding, wordIndex, wordLength, fullCount} = this.state;
+    let currentStr = fullCount ?
+      this.state.words[wordIndex] : 
+       this.props.randomAnimation ? this.getRandomString( Math.round(this.state.words[wordIndex].length * .7 - 1) ) : this.state.words[wordIndex].substr(0, wordLength);
+
+    if ( wordLength >= this.state.words[wordIndex].length ) {
       expanding = false;
       /* Keep it full length for a while */
       if ( fullCount === false )
       {
-        fullCount = Math.round(70 + (1.2 * currentStr.length));
+        fullCount = Math.round((this.props.staticBase || 85) + ((this.props.staticLengthWeight || 1.2) * currentStr.length) * (wordIndex ? 1 : 2.2));
+        if (this.ref && this.ref.current) {
+          let shrinkTime = this.props.shrinkTime || 120;
+          if (!this.ref.current.style.transitionDuration) this.ref.current.style.transitionDuration = `${shrinkTime}ms`;
+          this.ref.current.style.transform = `scale(1.1)`;
+          const elem = this.ref.current;
+          window.setTimeout(()=> elem.style.transform = 'scale(1)', shrinkTime);
+        }
       }
       else if ( fullCount === 0 )
       {
@@ -61,12 +93,12 @@ class TextToggle extends Component {
       wordIndex,
       wordLength,
       currentStr,
-      fullCount
+      fullCount,
     })
   }
 
   componentDidMount() {
-    this.interval = window.setInterval( this.getText.bind(this), this.state.charDelay );
+    this.interval = window.setInterval( this.getText.bind(this), this.props.charDelay || 27 );
   }
 
   componentWillUnmount() {
@@ -76,7 +108,7 @@ class TextToggle extends Component {
   render() {
     // eslint-disable-next-line
     return (
-      <span>{this.state.prefix + this.state.currentStr + this.state.suffix}</span>
+      <span style={{...(this.props.style || {}),display:"inline-block"}} ref={this.ref}>{this.state.prefix + this.state.currentStr + this.state.suffix}</span>
     );
   }
 }
@@ -143,7 +175,6 @@ class BaseComponent extends Component {
       if (this.props.wordiness) getWordiness = this.props.wordiness;
       else if (post.wordiness) getWordiness = () => post.wordiness;
 
-
       this.setState({post:{...this.state.post, ...post}});
 
       if (this.state.evaluateDynamicContent)
@@ -208,6 +239,7 @@ class ImageComponent extends BaseComponent {
     this.state.resourceFunction = 'getImage';
     delete this.state.post;
     this.state.imageurl = '';
+    this.state.wordiness = props.wordiness();
     this.state.resourceserver = props.resourceserver || 'https://backend.mattfinger.info';
   }
 
@@ -222,7 +254,14 @@ class ImageComponent extends BaseComponent {
   }
 
   async componentDidMount() {
-    this.getResource();
+    this.props.functions.registerWordinessCallback('imgCmp1', wordiness => {
+      this.setState({wordiness});
+    });
+    await this.getResource();
+  }
+
+  componentWillUnmount() {
+    this.props.functions.unregisterWordinessCallback('imgCmp1');
   }
 
   Img = () => {
@@ -235,7 +274,9 @@ class ImageComponent extends BaseComponent {
       <div id={this.props.containerId || ""}>
         <this.Img />
         <h2>Matt Finger</h2>
-        <h4><TextToggle prefix={"Web "} words={["Consultant", "Developer", "Designer"]} /></h4>
+        <h4><TextToggle style={{
+          color: "#fae543"
+        }} prefix={"Web "} words={["Consultant", "Developer", "Designer"]} randomAnimation={this.state.wordiness >= 2 ? 1 : 0} /></h4>
         <h5>(based in Milwaukee!)</h5>
       </div>
     );
@@ -303,7 +344,7 @@ class SkillComponent extends Component {
           <hr/>
           <section className="skilldescription">
             { this.state.components.map((C, index) => (<span key={index}><C /></span>)) }
-            <div className="priceTag">{skillObject.price ? `Standard Cost - $${skillObject.price} ${skillObject.price_unit || 'per hour'}` : 'Contact for more info!'}</div>
+            <div className="priceTag">{skillObject.price ? `Standard Cost - $${skillObject.price} ${skillObject.price_unit || 'per hour'}` : 'Contact for more info!'}{skillObject.price ? <sup> &dagger;</sup> : ""}</div>
           </section>
         </article>
       </div>
@@ -318,11 +359,16 @@ class SkillContainer extends Component {
     if (this.props.wordiness) wordiness = this.props.wordiness();
     let skills = this.props.skillList.filter(skill => skill.wordiness <= wordiness);
     return (
-      <div className="skillcontainer">
-        {skills.map((skill, index) => {
-          return (<SkillComponent wordiness={wordiness} key={index} skillObject={skill}/>);
-         })}
-      </div>
+      <>
+        <div className="skillcontainer">
+          {skills.map((skill, index) => {
+            return (<SkillComponent wordiness={wordiness} key={index} skillObject={skill}/>);
+          })}
+        </div>
+        <div className="disclaimer">&dagger; The listed price is for the standard skill or service solicited to clients, however there are rare instances in which I have to invoice slightly higher depending on a client's needs!
+        I try to keep this low, but there is often a lot of "off hours/off the record" work, such as researching niche tools and industry specific standards that increase the labor required to deliver the service.
+        The listed price also does not guarantee my current or future availability to provide a skill or service.</div>
+      </>
     );
   }
 }

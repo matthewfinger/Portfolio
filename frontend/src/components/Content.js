@@ -1,4 +1,4 @@
-import { BaseComponent, ImageComponent } from './BaseComponent'
+import { BaseComponent, ImageComponent } from './BaseComponent';
 
 //this class is for all content sections
 class Content extends BaseComponent {
@@ -14,7 +14,7 @@ class Content extends BaseComponent {
     }
   }
 
-  constructor(props) {
+  constructor (props) {
     super(props);
     if (!this.state) this.state = {};
     this.state.sections = [];
@@ -63,7 +63,7 @@ class MainContent extends Content {
 
           <this.Content />
         </div>
-        <ImageComponent functions={this.state.functions} containerId="section1LogoContainer" id='section1Logo' imageName="Logo1" />
+        <ImageComponent functions={this.props.functions} containerId="section1LogoContainer" id='section1Logo' imageName="Logo1" wordiness={this.props.wordiness} />
       </section>
       <span style={{height: '5vh', width: '100%', display: 'block'}}></span>
       </>

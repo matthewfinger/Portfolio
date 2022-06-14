@@ -17,9 +17,10 @@ class App extends Component {
 
     this.functions = { getPost, getImage, getSections };
     this.state = this.state || {};
-    this.state.wordinessLevel = 1;
-
+    this.state.wordinessLevel = Number(window.localStorage.getItem('wordinessPreference') || 1);
   }
+
+  wordinessCallbacks = {}
 
   componentDidMount() {
     this.addskills = skills => this.setState({skills});
@@ -29,11 +30,36 @@ class App extends Component {
     sendVisit();
   }
 
-  incrementWordiness = () => this.setState({wordinessLevel: this.state.wordinessLevel + 1});
-  decrementWordiness = () => this.setState({wordinessLevel: this.state.wordinessLevel - 1});
+  incrementWordiness = () => {
+    let wordinessLevel = this.state.wordinessLevel + 1;
+    this.setState({wordinessLevel});
+    window.localStorage.setItem('wordinessPreference', wordinessLevel.toString());
+    for(let cb of Object.values(this.wordinessCallbacks)) {
+      cb(wordinessLevel);
+    }
+  };
+
+  decrementWordiness = () => {
+    let wordinessLevel = this.state.wordinessLevel - 1;
+    window.localStorage.setItem('wordinessPreference', wordinessLevel.toString());
+    this.setState({wordinessLevel});
+    for(let cb of Object.values(this.wordinessCallbacks)) {
+      cb(wordinessLevel);
+    }
+  };
+
+  registerWordinessCallback(name, cb) {
+    this.wordinessCallbacks[name] = cb;
+  }
+
+  unregisterWordinessCallback(name) {
+    delete this.wordinessCallbacks[name];
+  }
 
   render() {
-    const functions = this.functions;
+    let functions = this.functions;
+    functions.registerWordinessCallback = this.registerWordinessCallback.bind(this);
+    functions.unregisterWordinessCallback = this.unregisterWordinessCallback.bind(this);
     const getWordiness = () => this.state.wordinessLevel;
     return (
       <>
@@ -46,6 +72,7 @@ class App extends Component {
         <article id="pageContent">
           <MainContent functions={ functions } postName='Main Content' wordiness={getWordiness}/>
           <Content functions={ functions } wordiness={getWordiness}/>
+          <div className="disclaimer fullWidthCenter">&copy; 2022 Matt Finger; All rights reserved.</div>
         </article>
         <Footer functions={ functions } postName='Footer'/>
       </>

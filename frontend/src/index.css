@@ -1,5 +1,6 @@
 * {
-  transition: all 0.1s;
+  transition: all 0.125s cubic-bezier(0.2, -0.5, 0.7, 2.8) 0s;
+  color: #f0f0f0;
 }
 
 a, a:visited {
@@ -23,6 +24,17 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.disclaimer, .disclaimer>u {
+  font-size: 0.75rem;
+  color: #aaa;
+}
+
+.fullWidthCenter {
+  width: 100%;
+  justify-content: center;
+  text-align: center;
 }
 
 iframe {
@@ -63,6 +75,9 @@ nav .mobileOnly {
   line-height: 1.3em;
   font-size: 1.3em;
   padding: 1.2vw;
+}
+
+#aboutmecontent, #aboutmecontent * {
   color: #222;
 }
 
@@ -280,12 +295,6 @@ nav .mobileOnly {
   transition: all 0.1s;
 }
 
-#pageNav a:active, #pageNav a:hover {
-  /* background: #f7ff08; */
-  /* color: #0088cc; */
-  /* transform: scale(1.2); */
-}
-
 #pageNav .mobileOnly {
   margin-left: 8px;
   display: inline;
@@ -304,9 +313,10 @@ nav .mobileOnly {
 }
 
 .optionsRow {
-  align-items: stretch;
+  align-items: center;
   display: flex;
   flex-direction: row;
+  margin-bottom: 10px;
   width: 100%;
 }
 
@@ -314,6 +324,7 @@ nav .mobileOnly {
   background: #f0f0f0ff;
   border: 0px;
   border-radius: 5px;
+  color: #000;
   font-size: 14px;
   font-family: arial;
   box-shadow: 2px 2px 4px #000a;
@@ -321,7 +332,6 @@ nav .mobileOnly {
   flex-grow: 1;
   height: 30px;
   margin: auto 1em;
-  transition: all 0.1s;
 }
 
 .optionsRow button:hover:enabled {
@@ -365,20 +375,32 @@ nav .mobileOnly {
 }
 
 #section1LogoContainer h2 {
-  color: #00c2ff;
+  color: #1fb3df;
   font-size: max(3vw, 30px);
   margin-top: 2vh;
   margin-bottom: 2vh;
 }
 
+#section1LogoContainer h2 * {
+  color: #1fb3df;
+}
+
 #section1LogoContainer h4 {
-  color: #fbff85;
+  color: #fae543;
   font-size: max(2.8vw, 28px);
+}
+
+#section1LogoContainer h4 * {
+  color: #fae543;
 }
 
 #section1LogoContainer h5 {
   color: #ffc37a;
   font-size: max(1.6vw, 18px);
+}
+
+#section1LogoContainer h5 * {
+  color: #ffc37a;
 }
 
 #section1LogoContainer hr {
@@ -404,14 +426,14 @@ nav .mobileOnly {
 .mainSection > div {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .mainSection > div hr {
   background: #fff;
   display: block;
   margin: 15px 0 15px 0;
-}
+} 
 
 .mainSection .post_title {
   font-size: max(32px, calc(18px + 3vh)) !important;
@@ -458,11 +480,15 @@ nav .mobileOnly {
   background: #229de7; /* the default (every three starting on the THIRD) */
   height: 100%;
   padding: 1em;
-  transition: all 0.1s;
+  transition-duration: 0.125s;
 }
 
 .innerskillbox:hover {
-  transform: scale(1.2);
+  transform: scale(1.15);
+}
+
+.innerskillbox sup {
+  font-size: 0.7rem;
 }
 
 /* every three starting with the FIRST*/
@@ -610,7 +636,7 @@ input[type=range] {
   background: #ddda;
   height: 20px;
   margin: 10px;
-  margin-top: 20px;
+  margin-top: 10px;
   outline: none;
   width: 100%;
 }

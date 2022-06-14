@@ -5,21 +5,33 @@ class BackgroundSlider extends Component {
     let background = `hsl(${event.target.value}, 100%, 8%)`;
     if (Number(event.target.value) <= 3)
       background = `hsl(${event.target.value}, 0%, 8%)`;
+    window.localStorage.setItem( 'backgroundPreference', event.target.value.toString() );
     document.body.style.background = background;
     this.setState({value:event.target.value});
   }
 
+  resetBackground = () => {
+    this.changebackground({target: {value: 188}});
+    window.localStorage.removeItem("backgroundPreference");
+  }
+
   constructor(props) {
     super(props);
+    let value = Number(window.localStorage.getItem('backgroundPreference') || 0);
+    if (value <= 3) value = 188;
     this.state = {
-      value: 188
+      value
     };
+    if ( value && value !== 188 ) setTimeout(() => {document.body.style.background = `hsl(${value}, 100%, 8%)`}, 0);
   }
 
   render() {
     return (
       <div className='optionsRow'>
         <input onInput={this.changebackground} type="range" min="1" max="360" value={this.state.value} className="slider" id="myRange" />
+        <button style={{
+          background: "#e76"
+        }} onClick={this.resetBackground}>Reset</button>
       </div>
     );
   }
