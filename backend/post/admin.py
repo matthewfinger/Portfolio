@@ -15,11 +15,14 @@ class SkillAdmin(admin.ModelAdmin):
 
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         '''This will make sure that the suffix won't strip'''
+        original_args = kwargs.copy()
+        try:
+            if db_field.name == 'price_unit':
+                kwargs['strip'] = False
 
-        if db_field.name == 'price_unit':
-            kwargs['strip'] = False
-            
-        return super().formfield_for_dbfield(db_field, request, **kwargs)
+            return super().formfield_for_dbfield(db_field, request, **kwargs)
+        except:
+            return super().formfield_for_dbfield(db_field, request, **original_args)
 
 class SampleAdmin(admin.ModelAdmin):
     list_display = ('name','href','order_key','wordiness','id',)
