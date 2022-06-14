@@ -1,14 +1,15 @@
 from django.db import models
 from uuid import uuid4
 
-def NoStripCharField(**kwargs):
-    field = models.CharField(**kwargs)
-    def formfield(self, **kwargs):
-        kwargs['strip'] = False
-        return super(type(self), self).formfield(**kwargs)
+class NoStripCharField(models.CharField):
+  def formfield(self, **kwargs):
+    original_args = kwargs.copy()
+    try:
+      kwargs['strip'] = False
+      return super(type(self),self).formfield(**kwargs)
+    except:
+      return super(type(self),self).formfield(**original_args)
 
-    field.formfield = formfield
-    return field
 
 class Post(models.Model):
     name = models.CharField(max_length=100, unique=True)
