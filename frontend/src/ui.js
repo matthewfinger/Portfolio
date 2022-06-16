@@ -119,7 +119,8 @@ function hideNav(element) {
         visible = false;
         collapse(element);
       };
-      children.forEach(child => {child.onclick = child.onclick || close});
+
+      children.forEach(child => {child.onclick = close});
 
       if (!toggler.onclick) {
         const toggle = e => {
@@ -153,12 +154,14 @@ function revertNav(element) {
     element.parentElement.style.zIndex = '';
     show(element);
 
-    const children = [].slice.call(element.children).filter(el => !!(el));
-    const open = () => show(element);
-    children.forEach(child => child.onclick = open);
+    let children = [...element.children].filter(el => !!(el));
+    children.push(document.getElementById('root'));
+    children.forEach(child => child.onclick = null);
 
     if (element.dataset.toggler) {
-      collapse(document.querySelector(element.dataset.toggler));
+      const toggler = document.querySelector(element.dataset.toggler);
+      collapse(toggler);
+      toggler.onclick = null;
     }
   }
 }
