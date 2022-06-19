@@ -4,25 +4,33 @@ from django.forms.models import model_to_dict
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-
+import traceback
 from . import models
 from . import forms
 
 def index(request):
-    contacts = models.Contact.objects.all()
-    res = '<div>'
-    for contact in contacts:
-        res += "<p>"
-        res += contact.id
-        res += "</p>"
-        res += "<p>"
-        res += contact.title
-        res += " </p>"
+    try:
+        contacts = models.Contact.objects.all()
+        res = '<div>'
+        for contact in contacts:
+            res += "<p>"
+            res += "{}".format(contact.id)
+            res += "</p>"
+            res += "<p>"
+            res += contact.first_name
+            res += " </p>"
 
-    if len(contacts) == 0:
-        res += "<h1>No Contacts Added!</h1>"
-    res += '</div>'
-    return HttpResponse(res)
+        if len(contacts) == 0:
+            res += "<h1>No Contacts Added!</h1>"
+        res += '</div>'
+        return HttpResponse(res)
+    except Exception as e:
+        file = open('/home/matthewfinger/logs/server.log', 'a')
+        tb = '\n'.join(traceback.format_tb(e.__traceback__))
+        message = "{}\n{}".format(e, tb)
+        file.write(message)
+        file.close()
+        raise e
 
 def ContactForm(request):
     contact_form = forms.ContactForm(request.POST or None)
