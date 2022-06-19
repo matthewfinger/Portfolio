@@ -30,6 +30,7 @@ async function evalTag(tag, getWordiness=()=>0) {
   out.wordiness = Number(out.wordiness) || 0;
 
   const tempOut = { ...out };
+  let subvals, subcomps, n;
 
   switch (values[0]) {
     case 'img':
@@ -70,9 +71,8 @@ async function evalTag(tag, getWordiness=()=>0) {
     case 'ul':
     case 'unorderedlist':
       //every substr seperated by '|' except the first
-      const subvals = values.join(' ').split(/\s*\|\s*/g).slice(1);
-      let subcomps = [];
-      let n;
+      subvals = values.join(' ').split(/\s*\|\s*/g).slice(1);
+      subcomps = [];
       for (let i = 0; i < subvals.length; i++) {
         n = await evalTag(subvals[i]);
         subcomps.push(n.body);
@@ -82,6 +82,25 @@ async function evalTag(tag, getWordiness=()=>0) {
         <ul className={"post_ul " + out.Class} id={out.id}>
           { subcomps.map((Comp, index) => ( <li key={index}><Comp/></li> )) }
         </ul>
+      );
+
+      break;
+
+    case 'olist':
+    case 'ol':
+    case 'orderedlist':
+      //every substr seperated by '|' except the first
+      subvals = values.join(' ').split(/\s*\|\s*/g).slice(1);
+      subcomps = [];
+      for (let i = 0; i < subvals.length; i++) {
+        n = await evalTag(subvals[i]);
+        subcomps.push(n.body);
+      }
+
+      out.body = () => (
+        <ol className={"post_ol " + out.Class} id={out.id}>
+          { subcomps.map((Comp, index) => ( <li key={index}><Comp/></li> )) }
+        </ol>
       );
 
       break;

@@ -379,7 +379,7 @@ class SkillContainer extends Component {
             return (<SkillComponent wordiness={wordiness} key={index} skillObject={skill}/>);
           })}
         </div>
-        <div className="disclaimer">&dagger; The listed price is for the standard skill or service solicited to clients, however please understand there are rare instances in which I have to invoice slightly higher depending on your needs
+        <div className="disclaimer">&dagger; The listed price is for the standard skill or service solicited to clients, however please understand there are rare instances in which I may have to invoice a little higher depending on your needs
         I try to keep this low, but there is often a lot of "off hours/off the record" work, such as researching niche tools and industry specific standards that increase the labor required to get the job done right.
         Any prices listed as a Revision price include unscoped "after-thoughts", such as adding small features and redoing layouts. Clearly, the scope of work for tweaks varies, so I'll need case by case information before offering a price.
         The listed price also does not guarantee my current or future availability to provide a skill or service.</div>
