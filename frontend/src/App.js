@@ -24,8 +24,11 @@ class App extends Component {
 
   async componentDidMount() {
     this.addskills = skills => this.setState({skills});
-    await getSkills()
-    sendVisit();
+    getSkills()
+      .then(() => {
+        sendVisit();
+        this.scrollFromHrefAnchor();
+      });
 
     this.addskills();
 
