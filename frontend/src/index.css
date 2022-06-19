@@ -521,7 +521,7 @@ nav .mobileOnly {
 /* every three starting with the FIRST*/
 .outerskillbox:nth-child(3n+1) .innerskillbox {
   background: #d22d2d; /*red*/
-  /*color: #ffd4e5; /* blush-pink */
+  color: #ffcce6; /* blush-pink */
 }
 
 .outerskillbox:nth-child(3n+1) hr {

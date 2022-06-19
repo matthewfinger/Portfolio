@@ -137,7 +137,7 @@ async function evalTag(tag, getWordiness=()=>0) {
     case "hr":
       out.body = () => (<hr/>);
       break;
-      
+
     default:
       values = values.filter(val => !val.includes('=')).map(val => val.replaceAll('\\s', ' '));
       out.body = () => (<span>{values.join(' ')}</span>);

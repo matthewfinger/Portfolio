@@ -1,6 +1,8 @@
 import React from 'react';
 import { getPost, getImage, getSections, default_base_url } from '../functions/HTTPClient';
 import { getComponents } from '../functions/CmsFunctions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro'
 const { Component, createRef } = React;
 
 class TextToggle extends Component {
@@ -315,6 +317,14 @@ class SkillComponent extends Component {
     // @todo line up our heights
   }
 
+  copyLink(e) {
+    let href = (this.props.skillObject || {name: ""}).name.toLowerCase().replaceAll(/\s/g, '_').replaceAll(/[^a-z0-9_]/g, '');
+    if (href) {
+      window.location.hash = href;
+      navigator.clipboard.writeText(window.location.href)
+    }
+  }
+
   render() {
     const skillObject = this.props.skillObject || {};
 
@@ -335,12 +345,19 @@ class SkillComponent extends Component {
         .then(callback);
     }
 
+    const skillId = skillObject.name.toLowerCase().replaceAll(/\s/g, '_').replaceAll(/[^a-z0-9_]/g, '');
+
     return (
-      <div className="outerskillbox">
+      <div className="outerskillbox" id={skillId}>
         <article className="innerskillbox">
           <header className="skillheader">
             <this.ImageBanner />
-            <h1 className="skillname">{skillObject.name}</h1>
+            <h1 className="skillname">
+              <span data-href={`#${skillId}`} title="Copy Link" onClick={this.copyLink.bind(this)}>
+                <FontAwesomeIcon icon={solid('link')} size="sm" />
+              </span>
+              &nbsp;{skillObject.name}
+            </h1>
           </header>
           <hr/>
           <section className="skilldescription">
