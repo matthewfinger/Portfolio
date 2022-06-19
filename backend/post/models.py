@@ -77,6 +77,7 @@ class Skill(models.Model):
     recurring_price_unit = NoStripCharField(default="per month")
     revision_price = PriceField()
     revision_price_unit = NoStripCharField(default="per tweak")
+    is_consultation = models.BooleanField(default=False, null=False, blank=True)
 
 
 class Sample(models.Model):

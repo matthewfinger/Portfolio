@@ -375,6 +375,7 @@ class SkillComponent extends Component {
               <div>
                 {skillObject.revision_price ? (`Tweaks - $${skillObject.revision_price} ${skillObject.revision_price_unit || 'per tweak'}`) : ''}{skillObject.revision_price ? <sup> &dagger;</sup> : ""}
               </div>
+              <div>{skillObject.is_consultation ? (<><FontAwesomeIcon icon={solid('check')} size='sm' /> In person meeting</>) : ""}</div>
             </div>
           </section>
         </article>

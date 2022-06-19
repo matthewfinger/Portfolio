@@ -32,7 +32,8 @@ class SkillSerializer(serializers.ModelSerializer):
             'recurring_price',
             'recurring_price_unit',
             'revision_price',
-            'revision_price_unit'
+            'revision_price_unit',
+            'is_consultation'
         ]
 
 class SampleSerializer(serializers.ModelSerializer):
