@@ -350,13 +350,13 @@ class SkillComponent extends Component {
             <div className="spacer"></div>
             <div className="priceTag">
               <div>
-                {skillObject.price ? (`Standard Cost - $${skillObject.price} ${skillObject.price_unit || 'per hour'}`) : 'Contact for more info!'}{skillObject.price ? <sup> &dagger;</sup> : ""}
+                {skillObject.price ? (`Base - $${skillObject.price} ${skillObject.price_unit || 'per hour'}`) : 'Contact for more info!'}{skillObject.price ? <sup> &dagger;</sup> : ""}
               </div>
               <div>
-                {skillObject.recurring_price ? ( `Standard Cost - $${skillObject.recurring_price} ${skillObject.recurring_price_unit || 'per month'}` ) : ''}{skillObject.recurring_price ? <sup> &dagger;</sup> : ""}
+                {skillObject.recurring_price ? ( `Support - $${skillObject.recurring_price} ${skillObject.recurring_price_unit || 'per month'}` ) : ''}{skillObject.recurring_price ? <sup> &dagger;</sup> : ""}
               </div>
               <div>
-                {skillObject.revision_price ? (`Standard Cost - $${skillObject.revision_price} ${skillObject.revision_price_unit || 'per tweak'}`) : ''}{skillObject.revision_price ? <sup> &dagger;</sup> : ""}
+                {skillObject.revision_price ? (`Tweaks - $${skillObject.revision_price} ${skillObject.revision_price_unit || 'per tweak'}`) : ''}{skillObject.revision_price ? <sup> &dagger;</sup> : ""}
               </div>
             </div>
           </section>
@@ -379,8 +379,9 @@ class SkillContainer extends Component {
             return (<SkillComponent wordiness={wordiness} key={index} skillObject={skill}/>);
           })}
         </div>
-        <div className="disclaimer">&dagger; The listed price is for the standard skill or service solicited to clients, however there are rare instances in which I have to invoice slightly higher depending on a client's needs!
-        I try to keep this low, but there is often a lot of "off hours/off the record" work, such as researching niche tools and industry specific standards that increase the labor required to deliver the service.
+        <div className="disclaimer">&dagger; The listed price is for the standard skill or service solicited to clients, however please understand there are rare instances in which I have to invoice slightly higher depending on your needs
+        I try to keep this low, but there is often a lot of "off hours/off the record" work, such as researching niche tools and industry specific standards that increase the labor required to get the job done right.
+        Any prices listed as a Revision price include unscoped "after-thoughts", such as adding small features and redoing layouts. Clearly, the scope of work for tweaks varies, so I'll need case by case information before offering a price.
         The listed price also does not guarantee my current or future availability to provide a skill or service.</div>
       </>
     );
