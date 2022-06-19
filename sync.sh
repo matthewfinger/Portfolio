@@ -16,6 +16,8 @@ apache2ctl restart
 
 #lastly push since we might have migrations chagnes
 cd $basedir
+chmod -R ugo+rwx $basedir
+
 su - matthewfinger -c "cd $basedir && git add ."
 su - matthewfinger -c "cd $basedir && git commit -m\"Built on cloud\""
 su - matthewfinger -c "cd $basedir && git push origin main"
