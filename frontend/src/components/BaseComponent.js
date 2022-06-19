@@ -353,7 +353,7 @@ class SkillComponent extends Component {
           <header className="skillheader">
             <this.ImageBanner />
             <h1 className="skillname">
-              <span data-href={`#${skillId}`} title="Copy Link" onClick={this.copyLink.bind(this)}>
+              <span data-href={`#${skillId}`} title="Copy Link" onClick={this.copyLink.bind(this)} style={{cursor: "pointer"}} className="bulgeOnHover">
                 <FontAwesomeIcon icon={solid('link')} size="sm" />
               </span>
               &nbsp;{skillObject.name}

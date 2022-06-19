@@ -20,6 +20,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.bulgeOnHover:hover, .bulgeOnHover:active {
+  display: inline-block;
+  transform: scale(1.2);
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
