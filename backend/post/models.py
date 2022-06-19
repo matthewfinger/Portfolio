@@ -2,13 +2,20 @@ from django.db import models
 from uuid import uuid4
 
 class NoStripCharField(models.CharField):
-  def formfield(self, **kwargs):
-    kwargs = {
+
+  def __init__(self, **kwargs):
+    defaults = {
         "max_length": 100,
         "blank": True,
         "default": "per hour"
-    }.update(kwargs)
+    }
+    defaults.update(kwargs)
+    super().__init__(**defaults)
+
+
+  def formfield(self, **kwargs):
     original_args = kwargs.copy()
+
     try:
       kwargs['strip'] = False
       return super(type(self),self).formfield(**kwargs)
