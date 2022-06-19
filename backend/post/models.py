@@ -3,12 +3,12 @@ from uuid import uuid4
 
 class NoStripCharField(models.CharField):
   def formfield(self, **kwargs):
-    original_args = kwargs.copy()
     kwargs = {
-        "max_length":  100,
+        "max_length": 100,
         "blank": True,
         "default": "per hour"
     }.update(kwargs)
+    original_args = kwargs.copy()
     try:
       kwargs['strip'] = False
       return super(type(self),self).formfield(**kwargs)
