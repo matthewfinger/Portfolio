@@ -1,7 +1,20 @@
 #!/bin/bash
 
 basedir=/home/matthewfinger/website/Portfolio
+currenttime=`date "+%s"`
 permissionfix="chmod -R ugo+rwx $basedir"
+
+cp -R -f $basedir/backend /home/matthewfinger/website/backend-backup
+
+if [ !(-d /home/matthewfinger/website/dbbackups) ]
+    then
+        mkdir /home/matthewfinger/website/dbbackups
+fi
+if [ !(-d /home/matthewfinger/website/dbbackups/$currenttime) ]
+    then
+        mkdir /home/matthewfinger/website/dbbackups/$currenttime
+fi
+cp -f $basedir/backend/db.sqlite3 /home/matthewfinger/website/dbbackups/$currenttime/
 
 cd $basedir
 git pull origin main
