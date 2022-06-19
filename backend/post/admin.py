@@ -17,7 +17,7 @@ class SkillAdmin(admin.ModelAdmin):
         '''This will make sure that the suffix won't strip'''
         original_args = kwargs.copy()
         try:
-            if db_field.name == 'price_unit':
+            if db_field.name in {'price_unit', 'recurring_price_unit', 'revision_price_unit'}:
                 kwargs['strip'] = False
 
             return super().formfield_for_dbfield(db_field, request, **kwargs)

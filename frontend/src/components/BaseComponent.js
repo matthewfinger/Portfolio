@@ -348,7 +348,17 @@ class SkillComponent extends Component {
               { this.state.components.map((C, index) => (<span key={index}><C /></span>)) }
             </div>
             <div className="spacer"></div>
-            <div className="priceTag">{skillObject.price ? `Standard Cost - $${skillObject.price} ${skillObject.price_unit || 'per hour'}` : 'Contact for more info!'}{skillObject.price ? <sup> &dagger;</sup> : ""}</div>
+            <div className="priceTag">
+              <div>
+                {skillObject.price ? (`Standard Cost - $${skillObject.price} ${skillObject.price_unit || 'per hour'}`) : 'Contact for more info!'}{skillObject.price ? <sup> &dagger;</sup> : ""}
+              </div>
+              <div>
+                {skillObject.recurring_price ? ( `Standard Cost - $${skillObject.recurring_price} ${skillObject.recurring_price_unit || 'per month'}` ) : ''}{skillObject.recurring_price ? <sup> &dagger;</sup> : ""}
+              </div>
+              <div>
+                {skillObject.revision_price ? (`Standard Cost - $${skillObject.revision_price} ${skillObject.revision_price_unit || 'per tweak'}`) : ''}{skillObject.revision_price ? <sup> &dagger;</sup> : ""}
+              </div>
+            </div>
           </section>
         </article>
       </div>

@@ -20,7 +20,7 @@ class Nav extends BaseComponent {
       return (
         <ul className='navUl' id='navUl' data-toggler="#navToggle">
           <li id="navLogo">
-            <a href="#root" id="navLogoLink"><img alt="" src="/favicon.png"/><span className="mobileOnly">Top of Page</span></a>
+            <a href="/#" id="navLogoLink"><img alt="" src="/favicon.png"/><span className="mobileOnly">Top of Page</span></a>
           </li>
           {sections.map((section, index) =>
             <li key={index}>

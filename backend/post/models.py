@@ -4,6 +4,11 @@ from uuid import uuid4
 class NoStripCharField(models.CharField):
   def formfield(self, **kwargs):
     original_args = kwargs.copy()
+    kwargs = {
+        "max_length":  100,
+        "blank": True,
+        "default": "per hour"
+    }.update(kwargs)
     try:
       kwargs['strip'] = False
       return super(type(self),self).formfield(**kwargs)
@@ -43,6 +48,15 @@ class Resource(models.Model):
     def __str__(self):
         return self.name
 
+class PriceField(models.DecimalField):
+    def __init__(self, **kwargs):
+        kwargs['max_digits'] = 10
+        kwargs['decimal_places'] = 2
+        kwargs['blank'] = True
+        kwargs['null'] = True
+        kwargs['default'] = None
+        super().__init__(**kwargs)
+
 class Skill(models.Model):
     name = models.CharField(max_length=100, unique=True)
     wordiness = models.IntegerField(default=0, blank=True)
@@ -50,8 +64,12 @@ class Skill(models.Model):
     description = models.TextField(max_length=1000, blank=True, default='')
     image = models.ForeignKey('Image', models.SET_NULL, blank=True, null=True)
     enabled = models.BooleanField(blank=True, default=True)
-    price = models.DecimalField(blank=True, null=True, default=None, max_digits=10, decimal_places=2)
-    price_unit = NoStripCharField(max_length=100, blank=True, default="per hour")
+    price = PriceField()
+    price_unit = NoStripCharField(default="per hour")
+    recurring_price = PriceField()
+    recurring_price_unit = NoStripCharField(default="per month")
+    revision_price = PriceField()
+    revision_price_unit = NoStripCharField(default="per revision")
 
 
 class Sample(models.Model):

@@ -572,6 +572,10 @@ nav .mobileOnly {
   text-align: right;
 }
 
+.innerskillbox .priceTag > div {
+  display: block;
+}
+
 .pageSection {
  /* padding-top: 10vh;*/
 }
