@@ -6,11 +6,11 @@ permissionfix="chmod -R ugo+rwx $basedir"
 
 cp -R -f $basedir/backend /home/matthewfinger/website/backend-backup
 
-if [ !(-d /home/matthewfinger/website/dbbackups) ]
+if [ ! -d /home/matthewfinger/website/dbbackups ]
     then
         mkdir /home/matthewfinger/website/dbbackups
 fi
-if [ !(-d /home/matthewfinger/website/dbbackups/$currenttime) ]
+if [ ! -d /home/matthewfinger/website/dbbackups/$currenttime ]
     then
         mkdir /home/matthewfinger/website/dbbackups/$currenttime
 fi
