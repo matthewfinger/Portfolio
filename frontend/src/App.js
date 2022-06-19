@@ -35,6 +35,7 @@ class App extends Component {
       UiFun();
       if (x-- === 0) window.clearInterval(interval)
     }, 100);
+    this.scrollFromHrefAnchor();
   }
 
   incrementWordiness = () => {
@@ -61,6 +62,23 @@ class App extends Component {
 
   unregisterWordinessCallback(name) {
     delete this.wordinessCallbacks[name];
+  }
+
+  scrollFromHrefAnchor() {
+    /*  Not sure why, but this is more reliable than using setTimeout */
+    let i = 0;
+    let scrollThing = setInterval(() => {
+      if ( i++ ) {
+        clearInterval(scrollThing);
+      }
+      let components = window.location.href.split('?')[0].split('#');
+      if ( components.length > 1 ) {
+        let element = document.getElementById(components[1]);
+        if ( element && element instanceof HTMLElement ) {
+          element.scrollIntoView(true);
+        }
+      }
+    },200);
   }
 
   render() {
